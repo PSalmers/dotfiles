@@ -1,3 +1,2 @@
-(("default" . ((user-emacs-directory . "~/doom-emacs")
-            (env . (("DOOMDIR" . "~/exocortex/.doom.d")))))
+(("default" . ((user-emacs-directory . "~/doom-emacs")))
  ("gnu" . ((user-emacs-directory . "~/.emacs.default"))))
