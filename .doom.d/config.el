@@ -33,7 +33,6 @@
 (setq org-directory "~/org")
 
 (after! org
-  ;; Too many agenda files slow, so the only directory I specify is tasks
   (setq org-agenda-dim-blocked-tasks nil) ;; Disabled because I am using NEXT
   (setq org-agenda-todo-ignore-scheduled `future)
   (setq org-log-into-drawer t)
@@ -50,12 +49,34 @@
 
   (add-to-list 'org-modules 'org-habit)
   (setq org-habit-show-all-today t)
-  (map! :map org-mode-map :localleader "z" #'org-add-note)
-  (map! :map org-mode-map :localleader "S" #'org-save-all-org-buffers)
-  (map! :map org-agenda-mode-map :localleader "S" #'org-save-all-org-buffers)
-  (appendq! org-capture-templates '(("i" "GTD Inbox" entry
-                                    (file+headline "inbox.org" "GTD Inbox")
-                                    "* %u \n%?" :heading "Inbox" :prepend t))))
+  (map! :map org-mode-map
+        :localleader
+        "S" #'org-save-all-org-buffers
+        "z" #'org-add-note
+        "RET" #'+org/insert-item-below
+        )
+  (map! :map org-agenda-mode-map
+        :localleader
+        "S" #'org-save-all-org-buffers
+        "a" #'org-add-note
+        )
+  (map! :map doom-leader-open-map
+        (:prefix ("a" . "org agenda")
+         :desc "Agenda" "A" #'org-agenda
+         :desc "Next Actions" "n" (cmd! (org-todo-list 1))
+         :desc "Weekly Agenda" "a" #'org-agenda-list))
+  (map! :leader "x" #'org-capture)
+  (setq! org-capture-templates '(("i" "inbox" entry
+                                  (file "inbox.org")
+                                  "* %u %?" :prepend t)
+                                 ("n" "Next Action" entry
+                                  (file "commitments.org")
+                                  "* NEXT %?")
+                                 ("g" "Grocery" checkitem
+                                  (file+headline "commitments.org" "Shopping List"))
+                                 ("h" "Header" entry
+                                  (file "commitments.org")
+                                  "* %?"))))
 
 ;; (add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e")
 ;; (set-email-account! "patricksalmers@gmail.com"
