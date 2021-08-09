@@ -40,15 +40,17 @@
   (setq org-agenda-show-future-repeats nil)
   (setq org-startup-folded t)
 
-;; I experimented with hlissner's todo config, but found that it added too many
-;; keywords that i don't want to use, and lacks a NEXT keyword which I find to
-;; be very useful. I kept his KILL keyword and his use of the word IDEA instead
-;; of SOME
   (setq org-todo-keywords '((sequence "NEXT(n)" "|" "DONE(d)" "KILL(k@)")
                             (type "TODO(t)" "PROJ(p)" "WAIT(w@)" "IDEA(i)" "|")))
 
   (add-to-list 'org-modules 'org-habit)
   (setq org-habit-show-all-today t)
+
+  (add-to-list 'org-modules 'org-id)
+  (setq org-id-link-to-org-use-id t)
+
+  (add-to-list 'org-modules 'org-checklist)
+
   (map! :map org-mode-map
         :localleader
         "S" #'org-save-all-org-buffers
@@ -59,12 +61,13 @@
         :localleader
         "S" #'org-save-all-org-buffers
         "a" #'org-add-note
+        "l" #'org-agenda-log-mode
         )
   (map! :map doom-leader-open-map
-        (:prefix ("a" . "org agenda")
+        :prefix ("a" . "org agenda")
          :desc "Agenda" "A" #'org-agenda
          :desc "Next Actions" "n" (cmd! (org-todo-list 1))
-         :desc "Weekly Agenda" "a" #'org-agenda-list))
+         :desc "Weekly Agenda" "a" #'org-agenda-list)
   (map! :leader "x" #'org-capture)
   (setq! org-capture-templates '(("i" "inbox" entry
                                   (file "inbox.org")
@@ -74,6 +77,9 @@
                                   "* NEXT %?")
                                  ("g" "Grocery" checkitem
                                   (file+headline "commitments.org" "Shopping List"))
+                                 ("c" "Currently clocked-in" item (clock)
+                                  "Note taken on %U \\\\ \n%?"
+                                  :prepend t)
                                  ("h" "Header" entry
                                   (file "commitments.org")
                                   "* %?"))))
