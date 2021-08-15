@@ -56,6 +56,7 @@
         "S" #'org-save-all-org-buffers
         "z" #'org-add-note
         "RET" #'+org/insert-item-below
+        "B" #'org-revert-all-org-buffers
         )
   (map! :map org-agenda-mode-map
         :localleader
