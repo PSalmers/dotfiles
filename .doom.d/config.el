@@ -74,16 +74,13 @@
                                   (file "inbox.org")
                                   "* %u %?" :prepend t)
                                  ("n" "Next Action" entry
-                                  (file "commitments.org")
+                                  (file "tasks.org")
                                   "* NEXT %?")
                                  ("g" "Grocery" checkitem
-                                  (file+headline "commitments.org" "Shopping List"))
+                                  (file+headline "tasks.org" "Shopping List"))
                                  ("c" "Currently clocked-in" item (clock)
                                   "Note taken on %U \\\\ \n%?"
-                                  :prepend t)
-                                 ("h" "Header" entry
-                                  (file "commitments.org")
-                                  "* %?"))))
+                                  :prepend t))))
 
 ;; (add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e")
 ;; (set-email-account! "patricksalmers@gmail.com"
