@@ -39,6 +39,7 @@
   (setq org-log-done `time)
   (setq org-agenda-show-future-repeats nil)
   (setq org-startup-folded t)
+  (setq org-journal-date-format "%A, %D")
 
   (setq org-todo-keywords '((sequence "NEXT(n)" "|" "DONE(d)" "KILL(k@)")
                             (type "TODO(t)" "PROJ(p)" "WAIT(w@)" "IDEA(i)" "|")))
