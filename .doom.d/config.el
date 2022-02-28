@@ -115,6 +115,6 @@
 ;; they are implemented.
 
 (after! evil
-  (undefine-key! evil-normal-state-map "DEL")
-  (evilem-default-keybindings "DEL")
+  (undefine-key! evil-normal-state-map "RET")
+  (evilem-default-keybindings "RET")
   )
