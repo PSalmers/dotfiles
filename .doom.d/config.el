@@ -41,8 +41,8 @@
   (setq org-startup-folded t)
   (setq org-journal-date-format "%A, %D")
 
-  (setq org-todo-keywords '((sequence "NEXT(n)" "|" "DONE(d)" "KILL(k@)")
-                            (type "TODO(t)" "PROJ(p)" "WAIT(w@)" "IDEA(i)" "|")))
+  (setq org-todo-keywords '((sequence "TODO(t) NEXT(n)" "WAIT(w@)" "|" "DONE(d)" "KILL(k@)")
+                            (type "PROJ(p)" "HOLD(h)" "IDEA(i)" "|")))
 
   (add-to-list 'org-modules 'org-habit)
   (setq org-habit-show-all-today t)
@@ -115,6 +115,6 @@
 ;; they are implemented.
 
 (after! evil
-  (undefine-key! evil-normal-state-map "RET")
-  (evilem-default-keybindings "RET")
+  (undefine-key! evil-normal-state-map "DEL")
+  (evilem-default-keybindings "DEL")
   )
