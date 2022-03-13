@@ -35,17 +35,19 @@
 (after! org
   (setq org-agenda-dim-blocked-tasks nil) ;; Disabled because I am using NEXT
   (setq org-agenda-todo-ignore-scheduled `future)
+  (setq org-agenda-skip-deadline-prewarning-if-scheduled t)
+  (setq org-agenda-skip-deadline-prewarning-if-done t)
   (setq org-log-into-drawer t)
   (setq org-log-done `time)
   (setq org-agenda-show-future-repeats nil)
   (setq org-startup-folded t)
   (setq org-journal-date-format "%A, %D")
 
-  (setq org-todo-keywords '((sequence "TODO(t) NEXT(n)" "WAIT(w@)" "|" "DONE(d)" "KILL(k@)")
-                            (type "PROJ(p)" "HOLD(h)" "IDEA(i)" "|")))
+  (setq org-todo-keywords '((sequence "NEXT(n)" "WAIT(w@)" "|" "DONE(d)" "KILL(k@)")
+                            (type "PROJ(p)" "HOLD(h)" "IDEA(i)" "TODO(t)" "|")))
 
   (add-to-list 'org-modules 'org-habit)
-  (setq org-habit-show-all-today t)
+  (setq org-habit-show-all-today nil)
 
   (add-to-list 'org-modules 'org-id)
   (setq org-id-link-to-org-use-id t)
