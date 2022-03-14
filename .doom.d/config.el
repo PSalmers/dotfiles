@@ -79,6 +79,9 @@
                                  ("n" "Next Action" entry
                                   (file "tasks.org")
                                   "* NEXT %?")
+                                 ("j" "Journal" entry
+                                  (file+olp+datetree "journal.org")
+                                  "* %U %?\n%i\n%a\n** NEXT Process this note" :jump-to-captured t)
                                  ("g" "Grocery" checkitem
                                   (file+headline "tasks.org" "Shopping List"))
                                  ("c" "Currently clocked-in" item (clock)
