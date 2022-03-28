@@ -40,7 +40,6 @@
   (setq org-log-into-drawer t)
   (setq org-log-done `time)
   (setq org-agenda-show-future-repeats nil)
-  (setq org-startup-folded t)
   (setq org-journal-date-format "%A, %D")
 
   (setq org-todo-keywords '((sequence "NEXT(n)" "WAIT(w@)" "|" "DONE(d)" "KILL(k@)")
@@ -98,7 +97,7 @@
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
-(setq display-line-numbers-type 't)
+(setq display-line-numbers-type nil)
 
 ;; Keybinds
 
@@ -123,3 +122,4 @@
   (undefine-key! evil-normal-state-map "DEL")
   (evilem-default-keybindings "DEL")
   )
+(setq avy-keys '(?a ?r ?s ?t ?n ?e ?i ?o))
