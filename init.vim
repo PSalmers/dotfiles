@@ -39,7 +39,7 @@ colorscheme everforest
 
 let mapleader = " "
 
-map <CR> <Plug>(easymotion-prefix)
+map <leader>m <Plug>(easymotion-prefix)
 
 map <leader>f <cmd>GFiles<cr>
 map <leader>s <cmd>Rg<cr>
