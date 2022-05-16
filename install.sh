@@ -5,8 +5,16 @@ if !command -v rg &> /dev/null; then
     sudo apt-get install -y ripgrep
 fi
 
+if !command -v z &> /dev/null; then
+    sudo apt-get install -y zoxide
+fi
+
 if !command -v fzf &> /dev/null; then
     sudo apt-get install -y fzf
+fi
+
+if !command -v ranger &> /dev/null; then
+    sudo apt-get install -y ranger
 fi
 
 sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
