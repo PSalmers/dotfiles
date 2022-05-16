@@ -16,7 +16,7 @@
           },
           "to": [
             {
-              "shell_command": "~/src/app-switching/app-switcher.sh 1"
+              "shell_command": "~/.config/karabiner/assets/complex_modifications/app-switcher.sh 1"
             }
           ]
         },
@@ -32,7 +32,7 @@
           },
           "to": [
             {
-              "shell_command": "~/src/app-switching/app-switcher.sh 2"
+              "shell_command": "~/.config/karabiner/assets/complex_modifications/app-switcher.sh 2"
             }
           ]
         },
@@ -48,7 +48,7 @@
           },
           "to": [
             {
-              "shell_command": "~/src/app-switching/app-switcher.sh 3"
+              "shell_command": "~/.config/karabiner/assets/complex_modifications/app-switcher.sh 3"
             }
           ]
         },
@@ -64,7 +64,7 @@
           },
           "to": [
             {
-              "shell_command": "~/src/app-switching/app-switcher.sh 4"
+              "shell_command": "~/.config/karabiner/assets/complex_modifications/app-switcher.sh 4"
             }
           ]
         },
@@ -80,7 +80,7 @@
           },
           "to": [
             {
-              "shell_command": "~/src/app-switching/app-switcher.sh 5"
+              "shell_command": "~/.config/karabiner/assets/complex_modifications/app-switcher.sh 5"
             }
           ]
         },
@@ -96,7 +96,7 @@
           },
           "to": [
             {
-              "shell_command": "~/src/app-switching/app-switcher.sh 6"
+              "shell_command": "~/.config/karabiner/assets/complex_modifications/app-switcher.sh 6"
             }
           ]
         },
@@ -112,7 +112,7 @@
           },
           "to": [
             {
-              "shell_command": "~/src/app-switching/app-switcher.sh 7"
+              "shell_command": "~/.config/karabiner/assets/complex_modifications/app-switcher.sh 7"
             }
           ]
         },
@@ -128,7 +128,7 @@
           },
           "to": [
             {
-              "shell_command": "~/src/app-switching/app-switcher.sh 8"
+              "shell_command": "~/.config/karabiner/assets/complex_modifications/app-switcher.sh 8"
             }
           ]
         },
@@ -144,7 +144,7 @@
           },
           "to": [
             {
-              "shell_command": "~/src/app-switching/app-switcher.sh 9"
+              "shell_command": "~/.config/karabiner/assets/complex_modifications/app-switcher.sh 9"
             }
           ]
         },
@@ -160,7 +160,7 @@
           },
           "to": [
             {
-              "shell_command": "~/src/app-switching/app-switcher.sh 0"
+              "shell_command": "~/.config/karabiner/assets/complex_modifications/app-switcher.sh 0"
             }
           ]
         }
@@ -184,7 +184,7 @@
           },
           "to": [
             {
-              "shell_command": "~/src/app-switching/app-switcher.sh 1"
+              "shell_command": "~/.config/karabiner/assets/complex_modifications/app-switcher.sh 1"
             }
           ]
         },
@@ -203,7 +203,7 @@
           },
           "to": [
             {
-              "shell_command": "~/src/app-switching/app-switcher.sh 2"
+              "shell_command": "~/.config/karabiner/assets/complex_modifications/app-switcher.sh 2"
             }
           ]
         },
@@ -222,7 +222,7 @@
           },
           "to": [
             {
-              "shell_command": "~/src/app-switching/app-switcher.sh 3"
+              "shell_command": "~/.config/karabiner/assets/complex_modifications/app-switcher.sh 3"
             }
           ]
         },
@@ -241,7 +241,7 @@
           },
           "to": [
             {
-              "shell_command": "~/src/app-switching/app-switcher.sh 4"
+              "shell_command": "~/.config/karabiner/assets/complex_modifications/app-switcher.sh 4"
             }
           ]
         },
@@ -260,7 +260,7 @@
           },
           "to": [
             {
-              "shell_command": "~/src/app-switching/app-switcher.sh 5"
+              "shell_command": "~/.config/karabiner/assets/complex_modifications/app-switcher.sh 5"
             }
           ]
         },
@@ -279,7 +279,7 @@
           },
           "to": [
             {
-              "shell_command": "~/src/app-switching/app-switcher.sh 6"
+              "shell_command": "~/.config/karabiner/assets/complex_modifications/app-switcher.sh 6"
             }
           ]
         },
@@ -298,7 +298,7 @@
           },
           "to": [
             {
-              "shell_command": "~/src/app-switching/app-switcher.sh 7"
+              "shell_command": "~/.config/karabiner/assets/complex_modifications/app-switcher.sh 7"
             }
           ]
         },
@@ -317,7 +317,7 @@
           },
           "to": [
             {
-              "shell_command": "~/src/app-switching/app-switcher.sh 8"
+              "shell_command": "~/.config/karabiner/assets/complex_modifications/app-switcher.sh 8"
             }
           ]
         },
@@ -336,7 +336,7 @@
           },
           "to": [
             {
-              "shell_command": "~/src/app-switching/app-switcher.sh 9"
+              "shell_command": "~/.config/karabiner/assets/complex_modifications/app-switcher.sh 9"
             }
           ]
         },
@@ -355,7 +355,7 @@
           },
           "to": [
             {
-              "shell_command": "~/src/app-switching/app-switcher.sh 0"
+              "shell_command": "~/.config/karabiner/assets/complex_modifications/app-switcher.sh 0"
             }
           ]
         }

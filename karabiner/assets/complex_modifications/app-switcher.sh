@@ -4,7 +4,7 @@ osascript -l JavaScript << EndOfScript
             "Emacs",
             "Chrome",
             "iTerm",
-            "VSCode",
+            "Code",
             "Slack",
             "Chrome meet.google",
             "Chrome mail.google",
