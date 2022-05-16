@@ -14,5 +14,7 @@ sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.
 # I link after in case installs create any configs I wish to overwrite
 ln -sf ~/dotfiles/.zshrc ~/.zshrc
 mkdir ~/.config/nvim/
+
 ln -sf ~/dotfiles/editors/init.vim ~/.config/nvim/init.vim
+nvim +PlugInstall +qall
 
