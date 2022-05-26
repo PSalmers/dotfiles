@@ -9,8 +9,9 @@ set nu
 " Can have buffers in the background
 set hidden
 
-set tabstop=4 softtabstop=4
-set shiftwidth=4
+set tabstop=2
+set softtabstop=2
+set shiftwidth=2
 set expandtab
 set smartindent
 set nowrap
@@ -35,18 +36,19 @@ Plug 'tpope/vim-surround'
 call plug#end()
 
 let g:everforest_background = 'soft'
-colorscheme everforest
+colorscheme solarized8
 
 let mapleader = " "
 
 map <leader>m <Plug>(easymotion-prefix)
 
-map <leader>f <cmd>GFiles<cr>
-map <leader>s <cmd>Rg<cr>
-map <leader>b <cmd>Buffers<cr>
-map <leader>cn <cmd>cn<cr>
-map <leader>cp <cmd>cp<cr>
-map <leader>co <cmd>copen<cr>
-map <leader>cc <cmd>cclose<cr>
+nmap <leader>f <cmd>GFiles<cr>
+nmap <leader>s <cmd>Rg<cr>
+nmap <leader>b <cmd>Buffers<cr>
+nmap <leader>cn <cmd>cn<cr>
+nmap <leader>cp <cmd>cp<cr>
+nmap <leader>co <cmd>copen<cr>
+nmap <leader>cc <cmd>cclose<cr>
+nmap <leader>w <cmd>w<cr>
 nmap <ESC> <cmd>noh<cr>
 

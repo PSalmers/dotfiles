@@ -2,6 +2,8 @@ sudo apt-get install -y ripgrep
 sudo apt-get install -y zoxide
 sudo apt-get install -y fzf
 sudo apt-get install -y ranger
+sudo apt-get install -y universal-ctags
+sudo apt-get install -y fd-find
 
 sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
