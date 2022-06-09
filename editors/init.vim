@@ -36,7 +36,7 @@ Plug 'tpope/vim-surround'
 call plug#end()
 
 let g:everforest_background = 'soft'
-colorscheme solarized8
+colorscheme gruvbox
 
 let mapleader = " "
 
