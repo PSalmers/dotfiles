@@ -5,7 +5,7 @@ export PATH=$PATH:$HOME/doom-emacs/bin:$HOME/.local/bin:$HOME/.gem/ruby/2.6.0/bi
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
-export EDITOR="/opt/homebrew/bin/nvim"
+export EDITOR="/usr/bin/nvim"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
