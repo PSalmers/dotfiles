@@ -23,6 +23,7 @@ set updatetime=50
 set cursorline
 let g:netrw_liststyle= 3
 set grepprg=rg\ --vimgrep\ --no-heading
+solarized8_high
 
 call plug#begin('~/.vim/plugged')
 Plug 'gruvbox-community/gruvbox'
@@ -33,10 +34,11 @@ Plug 'junegunn/fzf.vim'
 Plug 'easymotion/vim-easymotion'
 Plug 'b4skyx/serenade'
 Plug 'tpope/vim-surround'
+Plug 'tpope/vim-fugitive'
 call plug#end()
 
 let g:everforest_background = 'soft'
-colorscheme gruvbox
+colorscheme solarized8
 
 let mapleader = " "
 
