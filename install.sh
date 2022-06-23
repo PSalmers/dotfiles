@@ -22,3 +22,4 @@ nvim +PlugInstall +qall
 
 # Dirty checking slows down the prompt on large repos, so I disable it
 git config --global --add oh-my-zsh.hide-dirty 1
+git config --global --add oh-my-zsh.hide-status 1
