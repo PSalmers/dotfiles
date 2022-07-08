@@ -53,7 +53,7 @@
 (evil-mode 1)
 (evil-define-key 'normal 'global (kbd "<leader>F") 'counsel-find-file)
 (evil-define-key 'normal 'global (kbd "<leader>u") 'universal-argument)
-(evil-define-key 'normal 'global (kbd "<leader>bp") 'previous-buffer)
+(evil-define-key 'normal '\\\\global (kbd "<leader>bp") 'previous-buffer)
 (evil-define-key 'normal 'global (kbd "<leader>bn") 'next-buffer)
 (evil-define-key 'normal 'global (kbd "<leader>bl") 'evil-switch-to-windows-last-buffer)
 (evil-define-key 'normal 'global (kbd "<leader>bd") 'kill-buffer)
@@ -107,9 +107,9 @@
 (evil-define-key 'insert 'global (kbd "C-i di") 'org-time-stamp)
 (evil-define-key 'insert 'global (kbd "C-i dI") 'org-time-stamp-inactive)
 
-; For tty
-(evil-define-key 'normal 'global (kbd "<leader>TAB") 'org-cycle)
-(evil-define-key 'normal 'global (kbd "<leader>SPCTAB") 'org-shifttab)
+; For tty. It sucks and doesn't unfold the whole tree. But better than nothing.
+(evil-define-key 'normal 'global (kbd "<leader>zf") 'org-cycle)
+(evil-define-key 'normal 'global (kbd "<leader>zF") 'org-shifttab)
 
 
 (setq org-directory "~/org")
@@ -121,7 +121,7 @@
 (setq org-agenda-files (list org-directory)
       org-refile-targets '((nil :maxlevel . 10))
       org-startup-indented t
-      org-intend-mode-hides-stars t
+      org-indent-mode-hides-stars t
       org-agenda-dim-blocked-tasks nil ;; Disabled because I am using NEXT
       org-agenda-todo-ignore-scheduled `future
       org-agenda-skip-deadline-prewarning-if-scheduled t
