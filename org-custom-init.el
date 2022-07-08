@@ -93,8 +93,8 @@
 
 (evil-define-key 'normal 'global (kbd "<leader>n") 'org-add-note)
 
-(evil-define-key 'normal 'global (kbd "<leader><tab>") 'org-next-link)
-(evil-define-key 'normal 'global (kbd "<leader><backtab>") 'org-previous-link)
+(evil-define-key 'normal 'global (kbd "<leader>]") 'org-next-link)
+(evil-define-key 'normal 'global (kbd "<leader>[") 'org-previous-link)
 (evil-define-key 'normal 'global (kbd "<leader>l") 'counsel-org-link)
 (evil-define-key 'normal 'global (kbd "<leader>s") 'org-store-link)
 (evil-define-key 'normal 'global (kbd "<leader>o") 'org-open-at-point)
@@ -106,6 +106,11 @@
 (evil-define-key 'normal 'global (kbd "<leader>dI") 'org-time-stamp-inactive)
 (evil-define-key 'insert 'global (kbd "C-i di") 'org-time-stamp)
 (evil-define-key 'insert 'global (kbd "C-i dI") 'org-time-stamp-inactive)
+
+; For tty
+(evil-define-key 'normal 'global (kbd "<leader>TAB") 'org-cycle)
+(evil-define-key 'normal 'global (kbd "<leader>S-TAB") 'org-shifttab)
+
 
 (setq org-directory "~/org")
 
