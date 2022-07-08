@@ -109,7 +109,7 @@
 
 ; For tty
 (evil-define-key 'normal 'global (kbd "<leader>TAB") 'org-cycle)
-(evil-define-key 'normal 'global (kbd "<leader>S-TAB") 'org-shifttab)
+(evil-define-key 'normal 'global (kbd "<leader><leader>TAB") 'org-shifttab)
 
 
 (setq org-directory "~/org")
