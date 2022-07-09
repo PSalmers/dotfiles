@@ -1,6 +1,11 @@
 (tool-bar-mode 0)
 (menu-bar-mode 0)
 
+; Skip UUIDs in org mode
+(add-to-list 'ispell-skip-region-alist '("[0-9a-f]\\{8\\}-[0-9a-f]\\{4\\}-[0-9a-f]\\{4\\}-[0-9a-f]\\{4\\}-[0-9a-f]\\{12\\}"))
+; Skip link locations in org mode (often HTTP urls)
+(add-to-list 'ispell-skip-region-alist '("\\[\\[" . "\\]\\["))
+
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 ;; Comment/uncomment this line to enable MELPA Stable if desired.  See `package-archive-priorities`
@@ -53,7 +58,7 @@
 (evil-mode 1)
 (evil-define-key 'normal 'global (kbd "<leader>F") 'counsel-find-file)
 (evil-define-key 'normal 'global (kbd "<leader>u") 'universal-argument)
-(evil-define-key 'normal '\\\\global (kbd "<leader>bp") 'previous-buffer)
+(evil-define-key 'normal 'global (kbd "<leader>bp") 'previous-buffer)
 (evil-define-key 'normal 'global (kbd "<leader>bn") 'next-buffer)
 (evil-define-key 'normal 'global (kbd "<leader>bl") 'evil-switch-to-windows-last-buffer)
 (evil-define-key 'normal 'global (kbd "<leader>bd") 'kill-buffer)
