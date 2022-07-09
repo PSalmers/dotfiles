@@ -1,9 +1,10 @@
 (tool-bar-mode 0)
 (menu-bar-mode 0)
 
+;; iSpell for spell check
 ; Skip UUIDs in org mode
 (add-to-list 'ispell-skip-region-alist '("[0-9a-f]\\{8\\}-[0-9a-f]\\{4\\}-[0-9a-f]\\{4\\}-[0-9a-f]\\{4\\}-[0-9a-f]\\{12\\}"))
-; Skip link locations in org mode (often HTTP urls)
+; Skip link locations in org mode (often HTTP URLs)
 (add-to-list 'ispell-skip-region-alist '("\\[\\[" . "\\]\\["))
 
 (require 'package)
@@ -118,6 +119,9 @@
 
 
 (setq org-directory "~/org")
+
+; Using personal dictionary
+(setq ispell-personal-dictionary (concat org-directory "/.aspell.en.pws"))
 
 (add-to-list 'org-modules 'org-checklist)
 (add-to-list 'org-modules 'org-habit)
