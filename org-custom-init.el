@@ -14,8 +14,8 @@
 ;;(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 
 ; fetch the list of packages available. I have commented this out to avoid needlessly pinging melpa etc on startup
-; (unless package-archive-contents
-;  (package-refresh-contents))
+ (unless package-archive-contents
+  (package-refresh-contents))
 
 (setq package-list
       '(which-key
@@ -25,7 +25,7 @@
 	avy
 	projectile
 	magit
-	evil
+	org-roam
 	gruvbox-theme))
 
 ; install the missing packages
@@ -47,89 +47,48 @@
 (counsel-projectile-mode)
 
 
-; Evil Configuration
-
-;; Must come before evil is required
-(setq evil-want-C-u-scroll t
-      evil-want-C-w-in-emacs-state t)
-
-(require 'evil)
-(evil-set-leader 'normal (kbd "SPC"))
-(evil-set-leader 'normal (kbd ",") t)
-(evil-mode 1)
-(evil-define-key 'normal 'global (kbd "<leader>F") 'counsel-find-file)
-(evil-define-key 'normal 'global (kbd "<leader>u") 'universal-argument)
-(evil-define-key 'normal 'global (kbd "<leader>bp") 'previous-buffer)
-(evil-define-key 'normal 'global (kbd "<leader>bn") 'next-buffer)
-(evil-define-key 'normal 'global (kbd "<leader>bl") 'evil-switch-to-windows-last-buffer)
-(evil-define-key 'normal 'global (kbd "<leader>bd") 'kill-buffer)
-(evil-define-key 'normal 'global (kbd "<leader>bb") 'counsel-switch-buffer)
-(evil-define-key 'normal 'global (kbd "C-n") 'evil-next-line)
-(evil-define-key 'normal 'global (kbd "C-p") 'evil-previous-line)
-(evil-define-key 'insert 'global (kbd "C-n") 'evil-next-line)
-(evil-define-key 'insert 'global (kbd "C-p") 'evil-previous-line)
-
 ;; Projectile
 (projectile-mode +1)
 (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-(evil-define-key 'normal 'global (kbd "<leader>f") 'counsel-projectile-find-file)
-(evil-define-key 'normal 'global (kbd "<leader>s") 'counsel-projectile-rg)
-
-;; Magit
-(evil-define-key 'normal 'global (kbd "<leader>m") 'magit-status)
 
 ;; Org Configuration
 (require 'org)
-(evil-define-key 'normal 'global (kbd "<leader>x") 'org-capture)
-(evil-define-key 'normal 'global (kbd "<localleader>x") 'org-toggle-checkbox)
-
-(evil-define-key 'normal 'global (kbd "<leader>ci") 'org-clock-in)
-(evil-define-key 'normal 'global (kbd "<leader>co") 'org-clock-out)
-(evil-define-key 'normal 'global (kbd "<leader>cc") 'org-clock-cancel)
-(evil-define-key 'normal 'global (kbd "<leader>cg") 'org-clock-goto)
-
-(evil-define-key 'normal 'global (kbd "<leader>aa") 'org-agenda)
-(evil-define-key 'normal 'global (kbd "<leader>aw") 'org-agenda-list)
-(evil-define-key 'normal 'global (kbd "<leader>an") (lambda () (interactive) (org-todo-list "NEXT")))
-
-(evil-define-key 'normal 'global (kbd "<leader>t") 'org-todo)
-
-(evil-define-key 'normal 'global (kbd "<leader>g") 'counsel-org-goto)
-(evil-define-key 'normal 'global (kbd "<leader>G") 'counsel-org-goto-all)
-
-(evil-define-key 'normal 'global (kbd "<leader>n") 'org-add-note)
-
-(evil-define-key 'normal 'global (kbd "<leader>]") 'org-next-link)
-(evil-define-key 'normal 'global (kbd "<leader>[") 'org-previous-link)
-(evil-define-key 'normal 'global (kbd "<leader>l") 'counsel-org-link)
-(evil-define-key 'normal 'global (kbd "<leader>s") 'org-store-link)
-(evil-define-key 'normal 'global (kbd "<leader>o") 'org-open-at-point)
-(evil-set-command-property 'org-open-at-point :jump t)
-
-(evil-define-key 'normal 'global (kbd "<leader>ds") 'org-schedule)
-(evil-define-key 'normal 'global (kbd "<leader>dd") 'org-deadline)
-(evil-define-key 'normal 'global (kbd "<leader>di") 'org-time-stamp)
-(evil-define-key 'normal 'global (kbd "<leader>dI") 'org-time-stamp-inactive)
-(evil-define-key 'insert 'global (kbd "C-i di") 'org-time-stamp)
-(evil-define-key 'insert 'global (kbd "C-i dI") 'org-time-stamp-inactive)
-
-; For tty. It sucks and doesn't unfold the whole tree. But better than nothing.
-(evil-define-key 'normal 'global (kbd "<leader>zf") 'org-cycle)
-(evil-define-key 'normal 'global (kbd "<leader>zF") 'org-shifttab)
-
+(global-set-key (kbd "C-x c") 'org-capture)
+(define-key org-mode-map (kbd "C-c j") 'counsel-org-goto-all)
 
 (setq org-directory "~/org")
 
 ; Using personal dictionary
 (setq ispell-personal-dictionary (concat org-directory "/.aspell.en.pws"))
 
-(add-to-list 'org-modules 'org-checklist)
+; org-roam
+(setq org-roam-directory (concat org-directory "/roam/")
+      org-roam-dailies-directory "daily/"
+      org-roam-dailies-capture-templates '(("d" "default" entry
+					    "* %?"
+					    :target (file+head "%<%Y-%m-%d>.org"
+							       "#+title: %<%Y-%m-%d>\n"))))
+(add-to-list 'display-buffer-alist
+             '("\\*org-roam\\*"
+               (display-buffer-in-direction)
+               (direction . right)
+               (window-width . 0.33)
+               (window-height . fit-window-to-buffer)))
+
 (add-to-list 'org-modules 'org-habit)
 (add-to-list 'org-modules 'org-id)
 
 (setq org-agenda-files (list org-directory)
       org-refile-targets '((nil :maxlevel . 10))
+      org-use-speed-commands t
+      org-speed-commands-user '(("g" . counsel-org-goto-all)
+				("d" . org-deadline)
+				("s" . org-schedule))
+      org-agenda-custom-commands '(("n" "Next Actions" todo "NEXT")
+				   ("r" "Schedule and NEXT" ((agenda "" ((org-agenda-span 'day)))
+							     (todo "NEXT"))))
       org-startup-indented t
+      org-link-frame-setup '((file . find-file)) ; opens links to org file in same window
       org-indent-mode-hides-stars t
       org-agenda-dim-blocked-tasks nil ;; Disabled because I am using NEXT
       org-agenda-todo-ignore-scheduled `future
@@ -162,9 +121,7 @@
 			       "Note taken on %U \\\\ \n%?"
 			       :prepend t)))
 
-
-(evil-define-key 'normal 'global (kbd "<leader>;") 'avy-goto-char-2)
-(evil-define-key 'insert 'global (kbd "C-;") 'avy-goto-char-2)
+(global-set-key (kbd "C-;") 'avy-goto-char-timer)
 (setq avy-keys '(?a ?r ?s ?t ?n ?e ?e ?i ?o))
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -181,7 +138,7 @@
  '(ispell-dictionary nil)
  '(line-number-mode nil)
  '(package-selected-packages
-   '(evil-collection evil spacemacs-theme gruvbox-theme god-mode counsel-projectile magit counsel projectile avy ivy which-key))
+   '(org-roam gruvbox-theme counsel-projectile magit counsel projectile avy ivy which-key))
  '(show-paren-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
