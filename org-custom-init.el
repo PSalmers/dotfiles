@@ -1,5 +1,11 @@
 (tool-bar-mode 0)
 (menu-bar-mode 0)
+(fido-mode)
+(setq mac-option-modifier 'control
+      mac-command-modifier 'meta)
+(global-set-key (kbd "C-x i") (lambda () (interactive) (find-file "~/org-custom/init.el")))
+(setq inhibit-splash-screen t)
+(global-set-key (kbd "C-c i") 'completion-at-point)
 
 ;; iSpell for spell check
 ; Skip UUIDs in org mode
@@ -18,15 +24,10 @@
   (package-refresh-contents))
 
 (setq package-list
-      '(which-key
-	ivy
-	counsel
-	counsel-projectile
-	avy
-	projectile
-	magit
+      '(avy
 	org-roam
-	gruvbox-theme))
+	magit
+	modus-themes))
 
 ; install the missing packages
 (dolist (package package-list)
@@ -35,26 +36,17 @@
 
 (package-initialize)
 
-(require 'which-key)
-(require 'ivy)
-(require 'counsel)
+(load-theme 'modus-operandi t)
+
+;; Avy Settings
 (require 'avy)
-(require 'projectile)
-
-(which-key-mode)
-(ivy-mode)
-(counsel-mode)
-(counsel-projectile-mode)
-
-
-;; Projectile
-(projectile-mode +1)
-(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+(global-set-key (kbd "C-;") 'avy-goto-char-timer)
+(setq avy-keys '(?a ?r ?s ?t ?n ?e ?i ?o))
 
 ;; Org Configuration
 (require 'org)
 (global-set-key (kbd "C-x c") 'org-capture)
-(define-key org-mode-map (kbd "C-c j") 'counsel-org-goto-all)
+(define-key org-mode-map (kbd "C-c j") (lambda () (interactive) (org-refile 1)))
 
 (setq org-directory "~/org")
 
@@ -68,6 +60,11 @@
 					    "* %?"
 					    :target (file+head "%<%Y-%m-%d>.org"
 							       "#+title: %<%Y-%m-%d>\n"))))
+(global-set-key (kbd "C-c r t") 'org-roam-dailies-goto-today)
+(global-set-key (kbd "C-c r i") 'org-roam-node-insert)
+(global-set-key (kbd "C-c r r") 'org-roam-buffer)
+(global-set-key (kbd "C-c r f") 'org-roam-node-find)
+
 (add-to-list 'display-buffer-alist
              '("\\*org-roam\\*"
                (display-buffer-in-direction)
@@ -80,10 +77,14 @@
 
 (setq org-agenda-files (list org-directory)
       org-refile-targets '((nil :maxlevel . 10))
+      org-refile-use-outline-path t
+      org-outline-path-complete-in-steps nil
+      org-tags-column 0
       org-use-speed-commands t
-      org-speed-commands-user '(("g" . counsel-org-goto-all)
+      org-speed-commands-user '(("g" . '(org-refile 1))
 				("d" . org-deadline)
-				("s" . org-schedule))
+				("s" . org-schedule)
+				("x" . org-capture))
       org-agenda-custom-commands '(("n" "Next Actions" todo "NEXT")
 				   ("r" "Schedule and NEXT" ((agenda "" ((org-agenda-span 'day)))
 							     (todo "NEXT"))))
@@ -100,6 +101,13 @@
       org-journal-date-format "%A, %D"
       org-todo-keywords '((sequence "NEXT(n)" "WAIT(w@)" "|" "DONE(d)" "KILL(k@)")
 			  (type "PROJ(p)" "HOLD(h)" "IDEA(i)" "TODO(t)" "|"))
+      org-todo-keyword-faces `(("NEXT" . (:background ,(modus-themes-color 'green-subtle-bg)))
+			       ("DONE" . (:background ,(modus-themes-color 'bg-special-calm)))
+			       ("KILL" . (:background ,(modus-themes-color 'red-subtle-bg)))
+			       ("PROJ" . (:background ,(modus-themes-color 'blue-subtle-bg)))
+			       ("WAIT" . (:background ,(modus-themes-color 'yellow-subtle-bg)))
+			       ("HOLD" . (:background ,(modus-themes-color 'yellow-subtle-bg)))
+			       ("IDEA" . (:background ,(modus-themes-color 'yellow-subtle-bg))))
       org-habit-show-all-today nil
       org-id-link-to-org-use-id t)
 
@@ -121,82 +129,15 @@
 			       "Note taken on %U \\\\ \n%?"
 			       :prepend t)))
 
-(global-set-key (kbd "C-;") 'avy-goto-char-timer)
-(setq avy-keys '(?a ?r ?s ?t ?n ?e ?i ?o))
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ansi-color-faces-vector
-   [default default default italic underline success warning error])
- '(ansi-color-names-vector
-   ["#212526" "#ff4b4b" "#b4fa70" "#fce94f" "#729fcf" "#e090d7" "#8cc4ff" "#eeeeec"])
- '(awesome-tray-mode-line-active-color "#2fafff")
- '(awesome-tray-mode-line-inactive-color "#323232")
- '(counsel-mode t)
  '(custom-safe-themes
-   '("d14f3df28603e9517eb8fb7518b662d653b25b26e83bd8e129acea042b774298" "6b5c518d1c250a8ce17463b7e435e9e20faa84f3f7defba8b579d4f5925f60c1" "4ce515d79ef94f3b7651c8e2a7c7d81814b9ca911eb2a16955f45f4555faf524" "18c5ec0e4d1723dbeadb65d17112f077529fd24261cb8cd4ceee145e6a6f4cd1" "83e0376b5df8d6a3fbdfffb9fb0e8cf41a11799d9471293a810deb7586c131e6" "7661b762556018a44a29477b84757994d8386d6edee909409fabe0631952dad9" "fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "78c4238956c3000f977300c8a079a3a8a8d4d9fee2e68bad91123b58a4aa8588" default))
- '(flymake-error-bitmap '(flymake-double-exclamation-mark modus-theme-fringe-red))
- '(flymake-note-bitmap '(exclamation-mark modus-theme-fringe-cyan))
- '(flymake-warning-bitmap '(exclamation-mark modus-theme-fringe-yellow))
- '(highlight-tail-colors '(("#2f4a00" . 0) ("#00415e" . 20)))
- '(hl-todo-keyword-faces
-   '(("HOLD" . "#cfdf30")
-     ("TODO" . "#feacd0")
-     ("NEXT" . "#b6a0ff")
-     ("THEM" . "#f78fe7")
-     ("PROG" . "#00d3d0")
-     ("OKAY" . "#4ae8fc")
-     ("DONT" . "#80d200")
-     ("FAIL" . "#ff8059")
-     ("BUG" . "#ff8059")
-     ("DONE" . "#44bc44")
-     ("NOTE" . "#f0ce43")
-     ("KLUDGE" . "#eecc00")
-     ("HACK" . "#eecc00")
-     ("TEMP" . "#ffcccc")
-     ("FIXME" . "#ff9977")
-     ("XXX+" . "#f4923b")
-     ("REVIEW" . "#6ae4b9")
-     ("DEPRECATED" . "#bfd9ff")))
- '(ibuffer-deletion-face 'modus-theme-mark-del)
- '(ibuffer-filter-group-name-face 'modus-theme-mark-symbol)
- '(ibuffer-marked-face 'modus-theme-mark-sel)
- '(ibuffer-title-face 'modus-theme-pseudo-header)
- '(ispell-dictionary nil)
- '(line-number-mode nil)
- '(org-src-block-faces 'nil)
+   '("4a288765be220b99defaaeb4c915ed783a9916e3e08f33278bf5ff56e49cbc73" "5a611788d47c1deec31494eb2bb864fde402b32b139fe461312589a9f28835db" default))
  '(package-selected-packages
-   '(org-roam gruvbox-theme counsel-projectile magit counsel projectile avy ivy which-key))
- '(pdf-view-midnight-colors '("#ffffff" . "#110b11"))
- '(show-paren-mode t)
- '(vc-annotate-background nil)
- '(vc-annotate-background-mode nil)
- '(vc-annotate-color-map
-   '((20 . "#ff8059")
-     (40 . "#feacd0")
-     (60 . "#f78fe7")
-     (80 . "#f4923b")
-     (100 . "#eecc00")
-     (120 . "#cfdf30")
-     (140 . "#f8dec0")
-     (160 . "#bfebe0")
-     (180 . "#44bc44")
-     (200 . "#80d200")
-     (220 . "#6ae4b9")
-     (240 . "#4ae8fc")
-     (260 . "#00d3d0")
-     (280 . "#c6eaff")
-     (300 . "#2fafff")
-     (320 . "#79a8ff")
-     (340 . "#00bcff")
-     (360 . "#b6a0ff")))
- '(vc-annotate-very-old-color nil)
- '(xterm-color-names
-   ["black" "#ff8059" "#44bc44" "#eecc00" "#2fafff" "#feacd0" "#00d3d0" "gray65"])
- '(xterm-color-names-bright
-   ["gray35" "#f4923b" "#80d200" "#cfdf30" "#79a8ff" "#f78fe7" "#4ae8fc" "white"]))
+   '(modus-themes which-key org-roam avy)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -204,7 +145,11 @@
  ;; If there is more than one, they won't work right.
  )
 
-;; Custom themes must be loaded after, so that the above "custom set variables"
-;; puts the theme in custom-safe-themes
+;; God mode configuration
+;; I do not know if I want to use god mode or not, but if I do, this is the config I may use
+;; (defun my-god-mode-update-cursor-type ()
+  ;; (setq cursor-type (if (or god-local-mode buffer-read-only) 'box 'bar)))
 
-(load-theme 'gruvbox-dark-soft)
+;; (add-hook 'post-command-hook #'my-god-mode-update-cursor-type)
+;; (global-set-key (kbd "<escape>") #'god-mode-all)
+
