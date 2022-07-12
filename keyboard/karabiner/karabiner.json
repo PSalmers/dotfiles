@@ -189,7 +189,7 @@
                                 },
                                 "to": [
                                     {
-                                        "shell_command": "~/src/app-switching/app-switcher.sh 1"
+                                        "shell_command": "~/.config/karabiner/assets/complex_modifications/app-switcher.sh 1"
                                     }
                                 ],
                                 "type": "basic"
@@ -205,7 +205,7 @@
                                 },
                                 "to": [
                                     {
-                                        "shell_command": "~/src/app-switching/app-switcher.sh 2"
+                                        "shell_command": "~/.config/karabiner/assets/complex_modifications/app-switcher.sh 2"
                                     }
                                 ],
                                 "type": "basic"
@@ -221,7 +221,7 @@
                                 },
                                 "to": [
                                     {
-                                        "shell_command": "~/src/app-switching/app-switcher.sh 3"
+                                        "shell_command": "~/.config/karabiner/assets/complex_modifications/app-switcher.sh 3"
                                     }
                                 ],
                                 "type": "basic"
@@ -237,7 +237,7 @@
                                 },
                                 "to": [
                                     {
-                                        "shell_command": "~/src/app-switching/app-switcher.sh 4"
+                                        "shell_command": "~/.config/karabiner/assets/complex_modifications/app-switcher.sh 4"
                                     }
                                 ],
                                 "type": "basic"
@@ -253,7 +253,7 @@
                                 },
                                 "to": [
                                     {
-                                        "shell_command": "~/src/app-switching/app-switcher.sh 5"
+                                        "shell_command": "~/.config/karabiner/assets/complex_modifications/app-switcher.sh 5"
                                     }
                                 ],
                                 "type": "basic"
@@ -269,7 +269,7 @@
                                 },
                                 "to": [
                                     {
-                                        "shell_command": "~/src/app-switching/app-switcher.sh 6"
+                                        "shell_command": "~/.config/karabiner/assets/complex_modifications/app-switcher.sh 6"
                                     }
                                 ],
                                 "type": "basic"
@@ -285,7 +285,7 @@
                                 },
                                 "to": [
                                     {
-                                        "shell_command": "~/src/app-switching/app-switcher.sh 7"
+                                        "shell_command": "~/.config/karabiner/assets/complex_modifications/app-switcher.sh 7"
                                     }
                                 ],
                                 "type": "basic"
@@ -301,7 +301,7 @@
                                 },
                                 "to": [
                                     {
-                                        "shell_command": "~/src/app-switching/app-switcher.sh 8"
+                                        "shell_command": "~/.config/karabiner/assets/complex_modifications/app-switcher.sh 8"
                                     }
                                 ],
                                 "type": "basic"
@@ -317,7 +317,7 @@
                                 },
                                 "to": [
                                     {
-                                        "shell_command": "~/src/app-switching/app-switcher.sh 9"
+                                        "shell_command": "~/.config/karabiner/assets/complex_modifications/app-switcher.sh 9"
                                     }
                                 ],
                                 "type": "basic"
@@ -333,7 +333,7 @@
                                 },
                                 "to": [
                                     {
-                                        "shell_command": "~/src/app-switching/app-switcher.sh 0"
+                                        "shell_command": "~/.config/karabiner/assets/complex_modifications/app-switcher.sh 0"
                                     }
                                 ],
                                 "type": "basic"
@@ -345,7 +345,7 @@
                         "manipulators": [
                             {
                                 "from": {
-                                    "key_code": "grave_accent_and_tilde",
+                                    "key_code": "left_shift",
                                     "modifiers": {
                                         "optional": [
                                             "caps_lock",
@@ -360,7 +360,51 @@
                                 },
                                 "to": [
                                     {
-                                        "key_code": "grave_accent_and_tilde"
+                                        "key_code": "z"
+                                    }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "key_code": "left_shift",
+                                    "modifiers": {
+                                        "optional": [
+                                            "caps_lock",
+                                            "left_command",
+                                            "left_control",
+                                            "left_alt",
+                                            "right_command",
+                                            "right_control",
+                                            "right_alt"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "z"
+                                    }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "key_code": "caps_lock",
+                                    "modifiers": {
+                                        "optional": [
+                                            "caps_lock",
+                                            "left_command",
+                                            "left_control",
+                                            "left_alt",
+                                            "right_command",
+                                            "right_control",
+                                            "right_alt"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "left_shift"
                                     }
                                 ],
                                 "type": "basic"
@@ -1240,7 +1284,7 @@
                                 },
                                 "to": [
                                     {
-                                        "key_code": "z"
+                                        "key_code": "escape"
                                     }
                                 ],
                                 "type": "basic"
@@ -3932,51 +3976,6 @@
                                 "type": "basic"
                             }
                         ]
-                    },
-                    {
-                        "description": "shift+caps_lock->caps_lock; caps_lock+[...keys] -> control+[..keys]; caps_lock -> escape",
-                        "manipulators": [
-                            {
-                                "from": {
-                                    "key_code": "caps_lock",
-                                    "modifiers": {
-                                        "mandatory": [
-                                            "shift"
-                                        ],
-                                        "optional": [
-                                            "caps_lock"
-                                        ]
-                                    }
-                                },
-                                "to": [
-                                    {
-                                        "key_code": "caps_lock"
-                                    }
-                                ],
-                                "type": "basic"
-                            },
-                            {
-                                "from": {
-                                    "key_code": "caps_lock",
-                                    "modifiers": {
-                                        "optional": [
-                                            "any"
-                                        ]
-                                    }
-                                },
-                                "to": [
-                                    {
-                                        "key_code": "left_control"
-                                    }
-                                ],
-                                "to_if_alone": [
-                                    {
-                                        "key_code": "escape"
-                                    }
-                                ],
-                                "type": "basic"
-                            }
-                        ]
                     }
                 ]
             },
@@ -4130,11 +4129,11 @@
                     ]
                 }
             ],
-            "name": "colemak internal",
+            "name": "colemak ansi",
             "parameters": {
                 "delay_milliseconds_before_open_device": 1000
             },
-            "selected": false,
+            "selected": true,
             "simple_modifications": [],
             "virtual_hid_keyboard": {
                 "country_code": 0,
@@ -4169,7 +4168,7 @@
                                 },
                                 "to": [
                                     {
-                                        "shell_command": "~/src/app-switching/app-switcher.sh 1"
+                                        "shell_command": "~/.config/karabiner/assets/complex_modifications/app-switcher.sh 1"
                                     }
                                 ],
                                 "type": "basic"
@@ -4188,7 +4187,7 @@
                                 },
                                 "to": [
                                     {
-                                        "shell_command": "~/src/app-switching/app-switcher.sh 2"
+                                        "shell_command": "~/.config/karabiner/assets/complex_modifications/app-switcher.sh 2"
                                     }
                                 ],
                                 "type": "basic"
@@ -4207,7 +4206,7 @@
                                 },
                                 "to": [
                                     {
-                                        "shell_command": "~/src/app-switching/app-switcher.sh 3"
+                                        "shell_command": "~/.config/karabiner/assets/complex_modifications/app-switcher.sh 3"
                                     }
                                 ],
                                 "type": "basic"
@@ -4226,7 +4225,7 @@
                                 },
                                 "to": [
                                     {
-                                        "shell_command": "~/src/app-switching/app-switcher.sh 4"
+                                        "shell_command": "~/.config/karabiner/assets/complex_modifications/app-switcher.sh 4"
                                     }
                                 ],
                                 "type": "basic"
@@ -4245,7 +4244,7 @@
                                 },
                                 "to": [
                                     {
-                                        "shell_command": "~/src/app-switching/app-switcher.sh 5"
+                                        "shell_command": "~/.config/karabiner/assets/complex_modifications/app-switcher.sh 5"
                                     }
                                 ],
                                 "type": "basic"
@@ -4264,7 +4263,7 @@
                                 },
                                 "to": [
                                     {
-                                        "shell_command": "~/src/app-switching/app-switcher.sh 6"
+                                        "shell_command": "~/.config/karabiner/assets/complex_modifications/app-switcher.sh 6"
                                     }
                                 ],
                                 "type": "basic"
@@ -4283,7 +4282,7 @@
                                 },
                                 "to": [
                                     {
-                                        "shell_command": "~/src/app-switching/app-switcher.sh 7"
+                                        "shell_command": "~/.config/karabiner/assets/complex_modifications/app-switcher.sh 7"
                                     }
                                 ],
                                 "type": "basic"
@@ -4302,7 +4301,7 @@
                                 },
                                 "to": [
                                     {
-                                        "shell_command": "~/src/app-switching/app-switcher.sh 8"
+                                        "shell_command": "~/.config/karabiner/assets/complex_modifications/app-switcher.sh 8"
                                     }
                                 ],
                                 "type": "basic"
@@ -4321,7 +4320,7 @@
                                 },
                                 "to": [
                                     {
-                                        "shell_command": "~/src/app-switching/app-switcher.sh 9"
+                                        "shell_command": "~/.config/karabiner/assets/complex_modifications/app-switcher.sh 9"
                                     }
                                 ],
                                 "type": "basic"
@@ -4340,7 +4339,7 @@
                                 },
                                 "to": [
                                     {
-                                        "shell_command": "~/src/app-switching/app-switcher.sh 0"
+                                        "shell_command": "~/.config/karabiner/assets/complex_modifications/app-switcher.sh 0"
                                     }
                                 ],
                                 "type": "basic"
@@ -4361,6 +4360,19 @@
                     },
                     "ignore": true,
                     "manipulate_caps_lock_led": true,
+                    "simple_modifications": []
+                },
+                {
+                    "disable_built_in_keyboard_if_exists": false,
+                    "fn_function_keys": [],
+                    "identifiers": {
+                        "is_keyboard": false,
+                        "is_pointing_device": true,
+                        "product_id": 258,
+                        "vendor_id": 10730
+                    },
+                    "ignore": false,
+                    "manipulate_caps_lock_led": false,
                     "simple_modifications": []
                 }
             ],
@@ -4490,7 +4502,7 @@
             "parameters": {
                 "delay_milliseconds_before_open_device": 1000
             },
-            "selected": true,
+            "selected": false,
             "simple_modifications": [],
             "virtual_hid_keyboard": {
                 "country_code": 0,
