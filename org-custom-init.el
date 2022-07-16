@@ -7,6 +7,12 @@
 (setq inhibit-splash-screen t)
 (global-set-key (kbd "C-c i") 'completion-at-point)
 
+(grep-apply-setting
+   'grep-find-command
+   '("rg -n -H --no-heading -e '' $(git rev-parse --show-toplevel || pwd)" . 27))
+
+(setq make-backup-files nil) ; I use git instead
+
 ;; iSpell for spell check
 ; Skip UUIDs in org mode
 (add-to-list 'ispell-skip-region-alist '("[0-9a-f]\\{8\\}-[0-9a-f]\\{4\\}-[0-9a-f]\\{4\\}-[0-9a-f]\\{4\\}-[0-9a-f]\\{12\\}"))
@@ -45,7 +51,9 @@
 
 ;; Org Configuration
 (require 'org)
-(global-set-key (kbd "C-x c") 'org-capture)
+(global-set-key (kbd "C-c c") 'org-capture)
+(global-set-key (kbd "C-c a") 'org-agenda)
+(global-set-key (kbd "C-c s") 'org-store-link)
 (define-key org-mode-map (kbd "C-c j") (lambda () (interactive) (org-refile 1)))
 
 (setq org-directory "~/org")
@@ -93,6 +101,7 @@
       org-indent-mode-hides-stars t
       org-agenda-dim-blocked-tasks nil ;; Disabled because I am using NEXT
       org-agenda-todo-ignore-scheduled `future
+      org-agenda-todo-ignore-time-comparison-use-seconds t
       org-agenda-skip-deadline-prewarning-if-scheduled t
       org-agenda-skip-deadline-prewarning-if-done t
       org-log-into-drawer t
@@ -135,9 +144,8 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-   '("4a288765be220b99defaaeb4c915ed783a9916e3e08f33278bf5ff56e49cbc73" "5a611788d47c1deec31494eb2bb864fde402b32b139fe461312589a9f28835db" default))
- '(package-selected-packages
-   '(modus-themes which-key org-roam avy)))
+   '("d14f3df28603e9517eb8fb7518b662d653b25b26e83bd8e129acea042b774298" "70cfdd2e7beaf492d84dfd5f1955ca358afb0a279df6bd03240c2ce74a578e9e" "4a288765be220b99defaaeb4c915ed783a9916e3e08f33278bf5ff56e49cbc73" "5a611788d47c1deec31494eb2bb864fde402b32b139fe461312589a9f28835db" default))
+ '(package-selected-packages '(modus-themes which-key org-roam god-mode avy)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
