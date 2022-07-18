@@ -1,14 +1,16 @@
 (tool-bar-mode 0)
 (menu-bar-mode 0)
-(fido-mode)
+(fido-vertical-mode)
 (setq mac-option-modifier 'control
       mac-command-modifier 'meta)
 (global-set-key (kbd "C-x i") (lambda () (interactive) (find-file "~/org-custom/init.el")))
 (setq inhibit-splash-screen t)
 (global-set-key (kbd "C-c i") 'completion-at-point)
+(global-set-key (kbd "M-z") 'zap-up-to-char)
+(global-set-key (kbd "C-.") 'repeat)
 
-(grep-apply-setting
-   'grep-find-command
+(setq
+   grep-find-command
    '("rg -n -H --no-heading -e '' $(git rev-parse --show-toplevel || pwd)" . 27))
 
 (setq make-backup-files nil) ; I use git instead
@@ -31,7 +33,9 @@
 
 (setq package-list
       '(avy
-	org-roam
+	evil
+	evil-collection
+	evil-org
 	magit
 	modus-themes))
 
@@ -40,14 +44,39 @@
   (unless (package-installed-p package)
     (package-install package)))
 
+(setq evil-want-keybinding nil) ; required before evil-related packages initialize
 (package-initialize)
 
 (load-theme 'modus-operandi t)
 
+;; Evil Mode configuration
+;; I am using evil mode again. I want to use vim in each place that I edit text (when possible). This
+;; prevents overhead from switching between text editing modalities. I chose vim as my modality
+;; because it is available practically everywhere.
+;; For simplicity's sake, I will not be trying to use vim bindings everywhere, only for editing text.
+(setq evil-want-C-u-scroll t
+      evil-respect-visual-line-mode t
+      evil-undo-system 'undo-redo)
+      
+
+;; evil-org-mode
+(add-to-list 'load-path "~/.emacs.d/plugins/evil-org-mode")
+(require 'evil-org)
+(add-hook 'org-mode-hook 'evil-org-mode)
+(evil-org-set-key-theme '(navigation insert textobjects additional calendar))
+(require 'evil-org-agenda)
+(evil-org-agenda-set-keys)
+(evil-org-set-key-theme '(textobjects insert navigation additional shift todo heading))
+(require 'evil-org-agenda)
+(evil-org-agenda-set-keys)
+
+(require 'evil)
+(evil-mode 1)
+(evil-collection-init)
+
 ;; Avy Settings
 (require 'avy)
 (global-set-key (kbd "C-;") 'avy-goto-char-timer)
-(setq avy-keys '(?a ?r ?s ?t ?n ?e ?i ?o))
 
 ;; Org Configuration
 (require 'org)
@@ -145,7 +174,7 @@
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    '("d14f3df28603e9517eb8fb7518b662d653b25b26e83bd8e129acea042b774298" "70cfdd2e7beaf492d84dfd5f1955ca358afb0a279df6bd03240c2ce74a578e9e" "4a288765be220b99defaaeb4c915ed783a9916e3e08f33278bf5ff56e49cbc73" "5a611788d47c1deec31494eb2bb864fde402b32b139fe461312589a9f28835db" default))
- '(package-selected-packages '(modus-themes which-key org-roam god-mode avy)))
+ '(package-selected-packages '(evil-mode modus-themes org-roam avy)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -153,11 +182,4 @@
  ;; If there is more than one, they won't work right.
  )
 
-;; God mode configuration
-;; I do not know if I want to use god mode or not, but if I do, this is the config I may use
-;; (defun my-god-mode-update-cursor-type ()
-  ;; (setq cursor-type (if (or god-local-mode buffer-read-only) 'box 'bar)))
-
-;; (add-hook 'post-command-hook #'my-god-mode-update-cursor-type)
-;; (global-set-key (kbd "<escape>") #'god-mode-all)
 
