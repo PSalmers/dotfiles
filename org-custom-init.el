@@ -1,4 +1,4 @@
-(tool-bar-mode 0)
+(if window-system (tool-bar-mode 0) nil)
 (menu-bar-mode 0)
 (fido-vertical-mode)
 (setq mac-option-modifier 'control
@@ -8,6 +8,11 @@
 (global-set-key (kbd "C-c i") 'completion-at-point)
 (global-set-key (kbd "M-z") 'zap-up-to-char)
 (global-set-key (kbd "C-.") 'repeat)
+
+(setq calendar-week-start-day 1)
+
+;; Keeps customizations from polluting my init
+(setq custom-file (concat user-emacs-directory "/custom.el"))
 
 ;; For acronyms I will use all caps, and for code I will use src blocks. So I will use the more natural sentence ending.
 (setq sentence-end-double-space nil)
@@ -38,6 +43,7 @@
       '(avy
 	plantuml-mode
 	magit
+	org-roam ; Roam is a bit heavyweight, but I know it supports all the workflows I need
 	; visual-fill-column ; This mode does not indent the fill column in org-indent mode
        ))
 
@@ -48,8 +54,7 @@
   (unless (package-installed-p package)
     (package-install package)))
 
-;(setq evil-want-keybinding nil) ; required before evil-related packages initialize
-;(package-initialize)
+(package-initialize)
 
 (load-theme 'modus-operandi t)
 
@@ -69,7 +74,8 @@
 ; Using personal dictionary
 (setq ispell-personal-dictionary (concat org-directory "/.aspell.en.pws"))
 
-; org-roam
+
+;; Org Roam settings
 (setq org-roam-directory (concat org-directory "/roam/")
       org-roam-dailies-directory "daily/"
       org-roam-dailies-capture-templates '(("d" "default" entry
@@ -87,6 +93,7 @@
                (direction . right)
                (window-width . 0.33)
                (window-height . fit-window-to-buffer)))
+
 
 (add-to-list 'org-modules 'org-habit)
 (add-to-list 'org-modules 'org-id)
@@ -138,9 +145,12 @@
 			      ("j" "Journal note" entry
 			       (file+olp+datetree "journal.org")
 			       "* %U %?\n%i\n%a\n** NEXT Process this note" :jump-to-captured t)
-			      ("J" "Journal" entry
-			       (file+olp+datetree "journal.org")
-			       "* %U %?\n%i\n%a" :jump-to-captured t)
+			      ("s" "Sleep Journal" plain
+			       (file+olp+datetree "sleep-journal.org")
+			       "- start-finish of attempt :: %?\n- medicine used :: \n- Restedness 1-10 :: ")
+			      ("f" "Fitness Journal" plain
+			       (file+olp+datetree "fitness-journal.org")
+			       "- Activity :: %?\n- start-finish :: \n- Avg HR :: ")
 			      ("g" "Grocery" checkitem
 			       (file+headline "tasks.org" "Shopping List"))
 			      ("c" "Currently clocked-in" item (clock)
@@ -149,6 +159,7 @@
 
 ;; Plant UML Setup
 ;; active Org-babel languages
+(require 'plantuml-mode)
 (org-babel-do-load-languages
  'org-babel-load-languages
  '(;; other Babel languages
@@ -162,19 +173,6 @@
       (cons '(:java . "-Dplantuml.include.path=\"/Users/psalmers/src/C4-PlantUML\"")
 	    (assq-delete-all :java org-babel-default-header-args:plantuml)))
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   '("83e0376b5df8d6a3fbdfffb9fb0e8cf41a11799d9471293a810deb7586c131e6" "d14f3df28603e9517eb8fb7518b662d653b25b26e83bd8e129acea042b774298" "70cfdd2e7beaf492d84dfd5f1955ca358afb0a279df6bd03240c2ce74a578e9e" "4a288765be220b99defaaeb4c915ed783a9916e3e08f33278bf5ff56e49cbc73" "5a611788d47c1deec31494eb2bb864fde402b32b139fe461312589a9f28835db" default))
- '(package-selected-packages '(plantuml-mode visual-fill-column evil-mode org-roam avy)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+
 
 
