@@ -9,6 +9,9 @@
 (global-set-key (kbd "M-z") 'zap-up-to-char)
 (global-set-key (kbd "C-.") 'repeat)
 
+;; For acronyms I will use all caps, and for code I will use src blocks. So I will use the more natural sentence ending.
+(setq sentence-end-double-space nil)
+
 (setq
    grep-find-command
    '("rg -n -H --no-heading -e '' $(git rev-parse --show-toplevel || pwd)" . 27))
@@ -33,46 +36,22 @@
 
 (setq package-list
       '(avy
-	evil
-	evil-collection
-	evil-org
+	plantuml-mode
 	magit
-	modus-themes))
+	; visual-fill-column ; This mode does not indent the fill column in org-indent mode
+       ))
+
+(package-initialize)
 
 ; install the missing packages
 (dolist (package package-list)
   (unless (package-installed-p package)
     (package-install package)))
 
-(setq evil-want-keybinding nil) ; required before evil-related packages initialize
-(package-initialize)
+;(setq evil-want-keybinding nil) ; required before evil-related packages initialize
+;(package-initialize)
 
 (load-theme 'modus-operandi t)
-
-;; Evil Mode configuration
-;; I am using evil mode again. I want to use vim in each place that I edit text (when possible). This
-;; prevents overhead from switching between text editing modalities. I chose vim as my modality
-;; because it is available practically everywhere.
-;; For simplicity's sake, I will not be trying to use vim bindings everywhere, only for editing text.
-(setq evil-want-C-u-scroll t
-      evil-respect-visual-line-mode t
-      evil-undo-system 'undo-redo)
-      
-
-;; evil-org-mode
-(add-to-list 'load-path "~/.emacs.d/plugins/evil-org-mode")
-(require 'evil-org)
-(add-hook 'org-mode-hook 'evil-org-mode)
-(evil-org-set-key-theme '(navigation insert textobjects additional calendar))
-(require 'evil-org-agenda)
-(evil-org-agenda-set-keys)
-(evil-org-set-key-theme '(textobjects insert navigation additional shift todo heading))
-(require 'evil-org-agenda)
-(evil-org-agenda-set-keys)
-
-(require 'evil)
-(evil-mode 1)
-(evil-collection-init)
 
 ;; Avy Settings
 (require 'avy)
@@ -134,6 +113,7 @@
       org-agenda-skip-deadline-prewarning-if-scheduled t
       org-agenda-skip-deadline-prewarning-if-done t
       org-log-into-drawer t
+      org-image-actual-width nil
       org-log-done `time
       org-agenda-show-future-repeats nil
       org-journal-date-format "%A, %D"
@@ -167,14 +147,29 @@
 			       "Note taken on %U \\\\ \n%?"
 			       :prepend t)))
 
+;; Plant UML Setup
+;; active Org-babel languages
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '(;; other Babel languages
+   (plantuml . t)))
+(setq org-plantuml-jar-path (expand-file-name "~/src/plantuml.jar")
+      plantuml-default-exec-mode 'jar
+      plantuml-jar-path "~/src/plantuml.jar")
+;; This value will also need to be passed as a :java header argument to plantuml src blocks
+(add-to-list 'plantuml-java-args "-Dplantuml.include.path=\"/Users/psalmers/src/C4-PlantUML\"")
+(setq org-babel-default-header-args:plantuml
+      (cons '(:java . "-Dplantuml.include.path=\"/Users/psalmers/src/C4-PlantUML\"")
+	    (assq-delete-all :java org-babel-default-header-args:plantuml)))
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-   '("d14f3df28603e9517eb8fb7518b662d653b25b26e83bd8e129acea042b774298" "70cfdd2e7beaf492d84dfd5f1955ca358afb0a279df6bd03240c2ce74a578e9e" "4a288765be220b99defaaeb4c915ed783a9916e3e08f33278bf5ff56e49cbc73" "5a611788d47c1deec31494eb2bb864fde402b32b139fe461312589a9f28835db" default))
- '(package-selected-packages '(evil-mode modus-themes org-roam avy)))
+   '("83e0376b5df8d6a3fbdfffb9fb0e8cf41a11799d9471293a810deb7586c131e6" "d14f3df28603e9517eb8fb7518b662d653b25b26e83bd8e129acea042b774298" "70cfdd2e7beaf492d84dfd5f1955ca358afb0a279df6bd03240c2ce74a578e9e" "4a288765be220b99defaaeb4c915ed783a9916e3e08f33278bf5ff56e49cbc73" "5a611788d47c1deec31494eb2bb864fde402b32b139fe461312589a9f28835db" default))
+ '(package-selected-packages '(plantuml-mode visual-fill-column evil-mode org-roam avy)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
