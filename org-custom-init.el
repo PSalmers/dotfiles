@@ -109,18 +109,21 @@
 				("s" . org-schedule)
 				("x" . org-capture))
       org-agenda-custom-commands '(("n" "Next Actions" todo "NEXT")
-				   ("r" "Schedule and NEXT" ((agenda "" ((org-agenda-span 'day)))
+				   ("d" "Schedule and NEXT" ((agenda "" ((org-agenda-span 'day)))
 							     (todo "NEXT"))))
       org-startup-indented t
       org-link-frame-setup '((file . find-file)) ; opens links to org file in same window
       org-indent-mode-hides-stars t
+      org-attach-store-link-p t
+      org-attach-auto-tag nil
+      org-attach-id-dir (concat org-directory "/data/")
+      org-image-actual-width (list 500)
       org-agenda-dim-blocked-tasks nil ;; Disabled because I am using NEXT
       org-agenda-todo-ignore-scheduled `future
       org-agenda-todo-ignore-time-comparison-use-seconds t
       org-agenda-skip-deadline-prewarning-if-scheduled t
       org-agenda-skip-deadline-prewarning-if-done t
       org-log-into-drawer t
-      org-image-actual-width nil
       org-log-done `time
       org-agenda-show-future-repeats nil
       org-journal-date-format "%A, %D"
@@ -172,7 +175,3 @@
 (setq org-babel-default-header-args:plantuml
       (cons '(:java . "-Dplantuml.include.path=\"/Users/psalmers/src/C4-PlantUML\"")
 	    (assq-delete-all :java org-babel-default-header-args:plantuml)))
-
-
-
-
