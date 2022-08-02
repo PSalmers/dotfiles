@@ -37,7 +37,11 @@
   fallthrough true
 )
 
-(defalias esc_ctl (tap-hold-next-release 200 esc lctl))
+(defalias esc_ctl  (tap-hold-next-release 200 esc lctl)
+	  firefox  (cmd-button "focus-window firefox")
+	  discord  (cmd-button "focus-window discord")
+	  emacs    (cmd-button "focus-window emacs")
+	  terminal (cmd-button "focus-window terminal"))
 
 (defsrc
   esc  f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12        ssrq slck pause
@@ -52,8 +56,8 @@
   esc  f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12        ssrq slck pause
   grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc  ins  home pgup  nlck kp/  kp*  kp-
   tab  q    w    e    r    t    y    u    i    o    p    [    ]    \     del  end  pgdn  kp7  kp8  kp9  kp+
-  @esc_ctl a    s    d    f    g    h    j    k    l    ;    '    ret                        kp4  kp5  kp6
-  lsft z    x    c    v    b    n    m    ,    .    /    rsft                 up         kp1  kp2  kp3  kprt
+  @esc_ctl a    s    d    f    g    h    j    k    l    ;    '    ret                    @firefox @discord  kp6
+  lsft z    x    c    v    b    n    m    ,    .    /    rsft                 up         @emacs @terminal kp3  kprt
   lctl lmet lalt           spc            ralt rmet cmp  rctl            left down rght  kp0  kp.
 )
 
