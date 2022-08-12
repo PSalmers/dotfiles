@@ -1,0 +1,35 @@
+{
+  "title": "Meh or Escape Caps Lock",
+  "rules": [
+    {
+      "description": "caps_lock+[...keys] -> meh+[..keys]; caps_lock -> escape",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "caps_lock",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+		"key_code": "left_control",
+		"modifiers": [
+		    "left_shift",
+		    "left_option"
+		]
+            }
+          ],
+          "to_if_alone": [
+            {
+              "key_code": "escape"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
