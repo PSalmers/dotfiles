@@ -1,15 +1,29 @@
+
+;; Disable interface bt default
 (if window-system (tool-bar-mode 0) nil)
 (menu-bar-mode 0)
+(setq inhibit-splash-screen t)
+
+;; Completion
 (fido-vertical-mode)
+(global-set-key (kbd "C-c i") 'completion-at-point)
+
+;; Mac Hotkeys
 (setq mac-option-modifier 'control
       mac-command-modifier 'meta)
-(global-set-key (kbd "C-x i") (lambda () (interactive) (find-file "~/org-custom/init.el")))
-(setq inhibit-splash-screen t)
-(global-set-key (kbd "C-c i") 'completion-at-point)
+
+;; Custom global keys
+(global-set-key (kbd "C-z") nil) ; unbind suspend frame so I can put custom commands behind C-z
+(global-set-key (kbd "C-z i") (lambda () (interactive) (find-file "~/org-custom/init.el")))
+
+;; Text editing tweaks
 (global-set-key (kbd "M-z") 'zap-up-to-char)
 (global-set-key (kbd "C-.") 'repeat)
 
 (setq calendar-week-start-day 1)
+
+;; Auto save
+(auto-save-visited-mode 1)
 
 ;; Keeps customizations from polluting my init
 (setq custom-file (concat user-emacs-directory "/custom.el"))
@@ -17,6 +31,7 @@
 ;; For acronyms I will use all caps, and for code I will use src blocks. So I will use the more natural sentence ending.
 (setq sentence-end-double-space nil)
 
+;; grep
 (setq
    grep-find-command
    '("rg -n -H --no-heading -e '' $(git rev-parse --show-toplevel || pwd)" . 27))
@@ -54,20 +69,38 @@
   (unless (package-installed-p package)
     (package-install package)))
 
-(package-initialize)
-
+(setq modus-themes-org-blocks 'gray-background) ; gray instead of tinted because tinted does not work for languages I haven't installed the mode for
 (load-theme 'modus-operandi t)
+
+
+;; Tramp and spin.el Setup
+(setq remote-shell "/usr/bin/zsh"
+      tramp-encoding-shell "/bin/zsh"
+      ; needed for project to work vc-handled-backends (remove 'Git vc-handled-backends) ; very slow over ssh, and I use magit anyways
+      )
+(require 'use-package)
+(use-package spin
+  :if (file-exists-p "~/src/github.com/Shopify/spin.el")
+  :load-path "~/src/github.com/Shopify/spin.el")
+
 
 ;; Avy Settings
 (require 'avy)
 (global-set-key (kbd "C-;") 'avy-goto-char-timer)
+(global-set-key (kbd "C-S-p") 'avy-goto-line-above)
+(global-set-key (kbd "C-S-n") 'avy-goto-line-below)
+
 
 ;; Org Configuration
 (require 'org)
 (global-set-key (kbd "C-c c") 'org-capture)
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c s") 'org-store-link)
-(define-key org-mode-map (kbd "C-c j") (lambda () (interactive) (org-refile 1)))
+
+(defun my-org-goto () (interactive)
+       (org-mark-ring-push)
+       (org-refile 1))
+(define-key org-mode-map (kbd "C-c j") 'my-org-goto)
 
 (setq org-directory "~/org")
 
@@ -82,10 +115,13 @@
 					    "* %?"
 					    :target (file+head "%<%Y-%m-%d>.org"
 							       "#+title: %<%Y-%m-%d>\n"))))
-(global-set-key (kbd "C-c r t") 'org-roam-dailies-goto-today)
-(global-set-key (kbd "C-c r i") 'org-roam-node-insert)
-(global-set-key (kbd "C-c r r") 'org-roam-buffer)
-(global-set-key (kbd "C-c r f") 'org-roam-node-find)
+
+(global-set-key (kbd "C-z r t") 'org-roam-dailies-goto-today)
+(global-set-key (kbd "C-z r i") 'org-roam-node-insert)
+(global-set-key (kbd "C-z r r") 'org-roam-buffer)
+(global-set-key (kbd "C-z r f") 'org-roam-node-find)
+(global-set-key (kbd "C-z r n") 'org-roam-dailies-goto-next-note)
+(global-set-key (kbd "C-z r p") 'org-roam-dailies-goto-previous-note)
 
 (add-to-list 'display-buffer-alist
              '("\\*org-roam\\*"
@@ -103,6 +139,7 @@
       org-refile-use-outline-path t
       org-outline-path-complete-in-steps nil
       org-tags-column 0
+      org-tag-persistent-alist '(("decisions". ?d) ("references" . ?r))
       org-use-speed-commands t
       org-speed-commands-user '(("g" . '(org-refile 1))
 				("d" . org-deadline)
@@ -127,6 +164,7 @@
       org-log-done `time
       org-agenda-show-future-repeats nil
       org-journal-date-format "%A, %D"
+      org-use-fast-todo-selection 'expert
       org-todo-keywords '((sequence "NEXT(n)" "WAIT(w@)" "|" "DONE(d)" "KILL(k@)")
 			  (type "PROJ(p)" "HOLD(h)" "IDEA(i)" "TODO(t)" "|"))
       org-todo-keyword-faces `(("NEXT" . (:background ,(modus-themes-color 'green-subtle-bg)))
@@ -155,11 +193,8 @@
 			       (file+olp+datetree "fitness-journal.org")
 			       "- Activity :: %?\n- start-finish :: \n- Avg HR :: ")
 			      ("g" "Grocery" checkitem
-			       (file+headline "tasks.org" "Shopping List"))
-			      ("c" "Currently clocked-in" item (clock)
-			       "Note taken on %U \\\\ \n%?"
-			       :prepend t)))
-
+			       (file+headline "tasks.org" "Shopping List"))))
+			      
 ;; Plant UML Setup
 ;; active Org-babel languages
 (require 'plantuml-mode)
