@@ -15,6 +15,9 @@
 ;; Custom global keys
 (global-set-key (kbd "C-z") nil) ; unbind suspend frame so I can put custom commands behind C-z
 (global-set-key (kbd "C-z i") (lambda () (interactive) (find-file "~/org-custom/init.el")))
+(global-set-key (kbd "C-z v") 'visual-line-mode)
+(global-set-key (kbd "C-z a") 'org-agenda)
+(global-set-key (kbd "C-z c") 'org-clock-goto)
 
 ;; Text editing tweaks
 (global-set-key (kbd "M-z") 'zap-up-to-char)
@@ -58,6 +61,8 @@
       '(avy
 	plantuml-mode
 	magit
+	zenburn-theme
+	use-package
 	org-roam ; Roam is a bit heavyweight, but I know it supports all the workflows I need
 	; visual-fill-column ; This mode does not indent the fill column in org-indent mode
        ))
@@ -70,7 +75,7 @@
     (package-install package)))
 
 (setq modus-themes-org-blocks 'gray-background) ; gray instead of tinted because tinted does not work for languages I haven't installed the mode for
-(load-theme 'modus-operandi t)
+(load-theme 'zenburn t)
 
 
 ;; Tramp and spin.el Setup
@@ -134,7 +139,10 @@
 (add-to-list 'org-modules 'org-habit)
 (add-to-list 'org-modules 'org-id)
 
-(setq org-agenda-files (list org-directory)
+(defun my-zenburn-colour (name)
+  (cdr (assoc name zenburn-default-colors-alist)))
+
+(setq org-agenda-files (list org-directory org-roam-directory (concat org-roam-directory org-roam-dailies-directory))
       org-refile-targets '((nil :maxlevel . 10))
       org-refile-use-outline-path t
       org-outline-path-complete-in-steps nil
@@ -167,13 +175,20 @@
       org-use-fast-todo-selection 'expert
       org-todo-keywords '((sequence "NEXT(n)" "WAIT(w@)" "|" "DONE(d)" "KILL(k@)")
 			  (type "PROJ(p)" "HOLD(h)" "IDEA(i)" "TODO(t)" "|"))
-      org-todo-keyword-faces `(("NEXT" . (:background ,(modus-themes-color 'green-subtle-bg)))
-			       ("DONE" . (:background ,(modus-themes-color 'bg-special-calm)))
-			       ("KILL" . (:background ,(modus-themes-color 'red-subtle-bg)))
-			       ("PROJ" . (:background ,(modus-themes-color 'blue-subtle-bg)))
-			       ("WAIT" . (:background ,(modus-themes-color 'yellow-subtle-bg)))
-			       ("HOLD" . (:background ,(modus-themes-color 'yellow-subtle-bg)))
-			       ("IDEA" . (:background ,(modus-themes-color 'yellow-subtle-bg))))
+      org-todo-keyword-faces `(("NEXT" . (:foreground ,(my-zenburn-colour "zenburn-bg")
+						      :background ,(my-zenburn-colour "zenburn-green")))
+			       ("DONE" . (:foreground ,(my-zenburn-colour "zenburn-bg")
+						      :background ,(my-zenburn-colour "zenburn-bg+2")))
+			       ("KILL" . (:foreground ,(my-zenburn-colour "zenburn-bg")
+						      :background ,(my-zenburn-colour "zenburn-red")))
+			       ("PROJ" . (:foreground ,(my-zenburn-colour "zenburn-bg")
+						      :background ,(my-zenburn-colour "zenburn-blue")))
+			       ("WAIT" . (:foreground ,(my-zenburn-colour "zenburn-bg")
+						      :background ,(my-zenburn-colour "zenburn-yellow")))
+			       ("HOLD" . (:foreground ,(my-zenburn-colour "zenburn-bg")
+						      :background ,(my-zenburn-colour "zenburn-yellow")))
+			       ("IDEA" . (:foreground ,(my-zenburn-colour "zenburn-bg")
+						      :background ,(my-zenburn-colour "zenburn-yellow"))))
       org-habit-show-all-today nil
       org-id-link-to-org-use-id t)
 
