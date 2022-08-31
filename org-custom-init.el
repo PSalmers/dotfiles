@@ -2,7 +2,9 @@
 ;; Disable interface bt default
 (if window-system (tool-bar-mode 0) nil)
 (menu-bar-mode 0)
-(setq inhibit-splash-screen t)
+
+;; this makes the screen startup fullscreen but does not let you resize the window after
+; (setq initial-frame-alist '((fullscreen . maximized))) 
 
 ;; Completion
 (fido-vertical-mode)
@@ -16,8 +18,6 @@
 (global-set-key (kbd "C-z") nil) ; unbind suspend frame so I can put custom commands behind C-z
 (global-set-key (kbd "C-z i") (lambda () (interactive) (find-file "~/org-custom/init.el")))
 (global-set-key (kbd "C-z v") 'visual-line-mode)
-(global-set-key (kbd "C-z a") 'org-agenda)
-(global-set-key (kbd "C-z c") 'org-clock-goto)
 
 ;; Text editing tweaks
 (global-set-key (kbd "M-z") 'zap-up-to-char)
@@ -63,6 +63,8 @@
 	magit
 	zenburn-theme
 	use-package
+	popup
+	fancy-dabbrev
 	org-roam ; Roam is a bit heavyweight, but I know it supports all the workflows I need
 	; visual-fill-column ; This mode does not indent the fill column in org-indent mode
        ))
@@ -96,11 +98,35 @@
 (global-set-key (kbd "C-S-n") 'avy-goto-line-below)
 
 
+;; Fancy Dabbrev
+;; Load fancy-dabbrev.el:
+(require 'fancy-dabbrev)
+
+;; Enable fancy-dabbrev previews everywhere:
+;; (global-fancy-dabbrev-mode)
+
+
+(setq fancy-dabbrev-expansion-context 'almost-everywhere)
+
+;; Let dabbrev searches ignore case and expansions preserve case:
+(setq dabbrev-case-distinction nil
+      dabbrev-case-fold-search t
+      dabbrev-case-replace nil)
+
+;; I bind to the traditional dabbev bindings so that I do not interfere with TAB's behaviour
+(global-set-key (kbd "M-/") 'fancy-dabbrev-expand)
+(global-set-key (kbd "C-M-/") 'fancy-dabbrev-backward)
+
+
 ;; Org Configuration
 (require 'org)
-(global-set-key (kbd "C-c c") 'org-capture)
-(global-set-key (kbd "C-c a") 'org-agenda)
-(global-set-key (kbd "C-c s") 'org-store-link)
+
+(global-set-key (kbd "C-z c") 'org-capture)
+(global-set-key (kbd "C-z s") 'org-store-link)
+(global-set-key (kbd "C-z a") 'org-agenda)
+(global-set-key (kbd "C-z j") 'org-clock-goto)
+
+(add-hook 'org-mode-hook 'visual-line-mode)
 
 (defun my-org-goto () (interactive)
        (org-mark-ring-push)
@@ -108,6 +134,14 @@
 (define-key org-mode-map (kbd "C-c j") 'my-org-goto)
 
 (setq org-directory "~/org")
+
+; Startup with org project open
+(setq inhibit-splash-screen t)
+(defun psalm-startup ()
+  (interactive)
+  (dired org-directory)
+  (org-agenda nil "d"))
+(add-hook 'window-setup-hook 'psalm-startup)
 
 ; Using personal dictionary
 (setq ispell-personal-dictionary (concat org-directory "/.aspell.en.pws"))
@@ -142,12 +176,20 @@
 (defun my-zenburn-colour (name)
   (cdr (assoc name zenburn-default-colors-alist)))
 
+(defun psalm-insert-header-eof () ""
+    (interactive)
+    (end-of-buffer)
+    (insert "\n* "))
+
+(define-key org-mode-map (kbd "C-z RET") 'psalm-insert-header-eof)
+
 (setq org-agenda-files (list org-directory org-roam-directory (concat org-roam-directory org-roam-dailies-directory))
       org-refile-targets '((nil :maxlevel . 10))
       org-refile-use-outline-path t
+      org-use-tag-inheritance nil
       org-outline-path-complete-in-steps nil
       org-tags-column 0
-      org-tag-persistent-alist '(("decisions". ?d) ("references" . ?r))
+      org-tag-persistent-alist '(("decisions". ?d) ("references" . ?r) ("obsolete" . ?o))
       org-use-speed-commands t
       org-speed-commands-user '(("g" . '(org-refile 1))
 				("d" . org-deadline)
@@ -168,6 +210,7 @@
       org-agenda-todo-ignore-time-comparison-use-seconds t
       org-agenda-skip-deadline-prewarning-if-scheduled t
       org-agenda-skip-deadline-prewarning-if-done t
+      org-agenda-skip-deadline-if-done t
       org-log-into-drawer t
       org-log-done `time
       org-agenda-show-future-repeats nil
