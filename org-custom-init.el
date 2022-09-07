@@ -149,6 +149,8 @@
 ; Using personal dictionary
 (setq ispell-personal-dictionary (concat org-directory "/.aspell.en.pws"))
 
+;; Resetting checkboxes
+(define-key org-mode-map (kbd "C-c b") 'org-reset-checkbox-state-subtree)
 
 ;; Org Roam settings
 (setq org-roam-directory (concat org-directory "/roam/")
