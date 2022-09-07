@@ -4,7 +4,10 @@
 (menu-bar-mode 0)
 
 ;; this makes the screen startup fullscreen but does not let you resize the window after
-; (setq initial-frame-alist '((fullscreen . maximized))) 
+;; (setq initial-frame-alist '((fullscreen . maximized)))
+
+;; Dired
+(setq dired-dwim-target t)
 
 ;; Completion
 (fido-vertical-mode)
@@ -204,6 +207,7 @@
       org-attach-store-link-p t
       org-attach-auto-tag nil
       org-attach-id-dir (concat org-directory "/data/")
+      org-attach-use-inheritance t
       org-image-actual-width (list 500)
       org-agenda-dim-blocked-tasks nil ;; Disabled because I am using NEXT
       org-agenda-todo-ignore-scheduled `future
