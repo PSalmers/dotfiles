@@ -23,7 +23,6 @@ set updatetime=50
 set cursorline
 let g:netrw_liststyle= 3
 set grepprg=rg\ --vimgrep\ --no-heading
-solarized8_high
 
 call plug#begin('~/.vim/plugged')
 Plug 'gruvbox-community/gruvbox'
