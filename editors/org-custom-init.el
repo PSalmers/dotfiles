@@ -79,9 +79,15 @@
   (unless (package-installed-p package)
     (package-install package)))
 
+;;; Themes
+;; Modus
 (setq modus-themes-org-blocks 'gray-background) ; gray instead of tinted because tinted does not work for languages I haven't installed the mode for
-(load-theme 'zenburn t)
+(load-theme 'modus-operandi t)
 
+;; Zenburn
+;;(load-theme 'zenburn t)
+(defun my-zenburn-colour (name)
+  (cdr (assoc name zenburn-default-colors-alist)))
 
 ;; Tramp and spin.el Setup
 (setq remote-shell "/usr/bin/zsh"
@@ -107,8 +113,6 @@
 
 ;; Enable fancy-dabbrev previews everywhere:
 ;; (global-fancy-dabbrev-mode)
-
-
 (setq fancy-dabbrev-expansion-context 'almost-everywhere)
 
 ;; Let dabbrev searches ignore case and expansions preserve case:
@@ -178,9 +182,6 @@
 (add-to-list 'org-modules 'org-habit)
 (add-to-list 'org-modules 'org-id)
 
-(defun my-zenburn-colour (name)
-  (cdr (assoc name zenburn-default-colors-alist)))
-
 (defun psalm-insert-header-eof () ""
     (interactive)
     (end-of-buffer)
@@ -194,7 +195,9 @@
       org-use-tag-inheritance nil
       org-outline-path-complete-in-steps nil
       org-tags-column 0
-      org-tag-persistent-alist '(("decisions". ?d) ("references" . ?r) ("obsolete" . ?o))
+      org-tag-persistent-alist '(("decisions" . ?d)
+				 ("references" . ?r)
+				 ("obsolete" . ?o))
       org-use-speed-commands t
       org-speed-commands-user '(("g" . '(org-refile 1))
 				("d" . org-deadline)
@@ -223,21 +226,36 @@
       org-journal-date-format "%A, %D"
       org-use-fast-todo-selection 'expert
       org-todo-keywords '((sequence "NEXT(n)" "WAIT(w@)" "|" "DONE(d)" "KILL(k@)")
-			  (type "PROJ(p)" "HOLD(h)" "IDEA(i)" "TODO(t)" "|"))
-      org-todo-keyword-faces `(("NEXT" . (:foreground ,(my-zenburn-colour "zenburn-bg")
-						      :background ,(my-zenburn-colour "zenburn-green")))
-			       ("DONE" . (:foreground ,(my-zenburn-colour "zenburn-bg")
-						      :background ,(my-zenburn-colour "zenburn-bg+2")))
-			       ("KILL" . (:foreground ,(my-zenburn-colour "zenburn-bg")
-						      :background ,(my-zenburn-colour "zenburn-red")))
-			       ("PROJ" . (:foreground ,(my-zenburn-colour "zenburn-bg")
-						      :background ,(my-zenburn-colour "zenburn-blue")))
-			       ("WAIT" . (:foreground ,(my-zenburn-colour "zenburn-bg")
-						      :background ,(my-zenburn-colour "zenburn-yellow")))
-			       ("HOLD" . (:foreground ,(my-zenburn-colour "zenburn-bg")
-						      :background ,(my-zenburn-colour "zenburn-yellow")))
-			       ("IDEA" . (:foreground ,(my-zenburn-colour "zenburn-bg")
-						      :background ,(my-zenburn-colour "zenburn-yellow"))))
+			  (type "PROJ(p)" "HOLD(h)" "IDEA(i)" "TODO(t)" "|")
+			  (sequence "SHAREABLE(s)" "|" "SHARED(S@)"))
+      ;; org-todo-keyword-faces `(("NEXT" . (:foreground ,(my-zenburn-colour "zenburn-bg")
+      ;; 						      :background ,(my-zenburn-colour "zenburn-green")))
+      ;; 			       ("DONE" . (:foreground ,(my-zenburn-colour "zenburn-bg")
+      ;; 						      :background ,(my-zenburn-colour "zenburn-bg+2")))
+      ;; 			       ("KILL" . (:foreground ,(my-zenburn-colour "zenburn-bg")
+      ;; 						      :background ,(my-zenburn-colour "zenburn-red")))
+      ;; 			       ("PROJ" . (:foreground ,(my-zenburn-colour "zenburn-bg")
+      ;; 						      :background ,(my-zenburn-colour "zenburn-blue")))
+      ;; 			       ("WAIT" . (:foreground ,(my-zenburn-colour "zenburn-bg")
+      ;; 						      :background ,(my-zenburn-colour "zenburn-yellow")))
+      ;; 			       ("HOLD" . (:foreground ,(my-zenburn-colour "zenburn-bg")
+      ;; 						      :background ,(my-zenburn-colour "zenburn-yellow")))
+      ;; 			       ("IDEA" . (:foreground ,(my-zenburn-colour "zenburn-bg")
+      ;; 						      :background ,(my-zenburn-colour "zenburn-yellow"))))
+      org-todo-keyword-faces `(("NEXT" . (:foreground ,(modus-themes-color 'fg-main)
+						      :background ,(modus-themes-color 'green-subtle-bg)))
+			       ("DONE" . (:foreground ,(modus-themes-color 'fg-dim)
+						      :background ,(modus-themes-color 'bg-main)))
+			       ("KILL" . (:foreground ,(modus-themes-color 'red-faint)
+						      :background ,(modus-themes-color 'bg-main)))
+			       ("PROJ" . (:foreground ,(modus-themes-color 'fg-main)
+						      :background ,(modus-themes-color 'blue-subtle-bg)))
+			       ("WAIT" . (:foreground ,(modus-themes-color 'fg-main)
+						      :background ,(modus-themes-color 'yellow-subtle-bg)))
+			       ("HOLD" . (:foreground ,(modus-themes-color 'fg-main)
+						      :background ,(modus-themes-color 'yellow-subtle-bg)))
+			       ("IDEA" . (:foreground ,(modus-themes-color 'fg-main)
+						      :background ,(modus-themes-color 'magenta-subtle-bg))))
       org-habit-show-all-today nil
       org-id-link-to-org-use-id t)
 
