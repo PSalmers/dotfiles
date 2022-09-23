@@ -3,7 +3,12 @@ sudo apt-get install -y zoxide
 sudo apt-get install -y fzf
 sudo apt-get install -y universal-ctags
 sudo apt-get install -y fd-find
- 
+
+sudo add-apt-repository ppa:kelleyk/emacs
+sudo apt install emacs28
+mkdir ~/.emacs.d
+cp ~/dotfiles/editors/org-custom-init.el ~/.emacs.d/init.el
+
 sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
  
 git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
