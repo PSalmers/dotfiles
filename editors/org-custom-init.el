@@ -9,18 +9,13 @@
 ;; Dired
 (setq dired-dwim-target t)
 
-;; Completion
-(fido-vertical-mode)
-(global-set-key (kbd "C-c i") 'completion-at-point)
-
 ;; Mac Hotkeys
 (setq mac-option-modifier 'control
       mac-command-modifier 'meta)
 
 ;; Custom global keys
-(global-set-key (kbd "C-z") nil) ; unbind suspend frame so I can put custom commands behind C-z
-(global-set-key (kbd "C-z i") (lambda () (interactive) (find-file "~/org-custom/init.el")))
-(global-set-key (kbd "C-z v") 'visual-line-mode)
+(global-set-key (kbd "C-c fi") (lambda () (interactive) (find-file "~/org-custom/init.el")))
+(global-set-key (kbd "C-c v") 'visual-line-mode)
 
 ;; Text editing tweaks
 (global-set-key (kbd "M-z") 'zap-up-to-char)
@@ -64,10 +59,14 @@
       '(avy
 	plantuml-mode
 	magit
-	zenburn-theme
 	use-package
 	popup
 	fancy-dabbrev
+	counsel
+	ivy
+	which-key
+	hydra
+	swiper
 	org-roam ; Roam is a bit heavyweight, but I know it supports all the workflows I need
 	; visual-fill-column ; This mode does not indent the fill column in org-indent mode
        ))
@@ -78,6 +77,11 @@
 (dolist (package package-list)
   (unless (package-installed-p package)
     (package-install package)))
+
+(counsel-mode)
+(ivy-mode)
+(global-set-key (kbd "C-c s") 'swiper)
+(global-set-key (kbd "C-x b") 'counsel-switch-buffer)
 
 ;;; Themes
 ;; Modus
@@ -128,17 +132,18 @@
 ;; Org Configuration
 (require 'org)
 
-(global-set-key (kbd "C-z c") 'org-capture)
-(global-set-key (kbd "C-z s") 'org-store-link)
-(global-set-key (kbd "C-z a") 'org-agenda)
-(global-set-key (kbd "C-z j") 'org-clock-goto)
+(global-set-key (kbd "C-c o c") 'org-capture)
+(global-set-key (kbd "C-c o s") 'org-store-link)
+(global-set-key (kbd "C-c o a") 'org-agenda)
+(global-set-key (kbd "C-c o j") 'org-clock-goto)
+(global-set-key (kbd "C-c o g") 'counsel-org-goto-all)
 
 (add-hook 'org-mode-hook 'visual-line-mode)
 
 (defun my-org-goto () (interactive)
        (org-mark-ring-push)
        (org-refile 1))
-(define-key org-mode-map (kbd "C-c j") 'my-org-goto)
+(define-key org-mode-map (kbd "C-c C-j") 'counsel-org-goto)
 
 (setq org-directory "~/org")
 
@@ -164,12 +169,12 @@
 					    :target (file+head "%<%Y-%m-%d>.org"
 							       "#+title: %<%Y-%m-%d>\n"))))
 
-(global-set-key (kbd "C-z r t") 'org-roam-dailies-goto-today)
-(global-set-key (kbd "C-z r i") 'org-roam-node-insert)
-(global-set-key (kbd "C-z r r") 'org-roam-buffer)
-(global-set-key (kbd "C-z r f") 'org-roam-node-find)
-(global-set-key (kbd "C-z r n") 'org-roam-dailies-goto-next-note)
-(global-set-key (kbd "C-z r p") 'org-roam-dailies-goto-previous-note)
+(global-set-key (kbd "C-c r t") 'org-roam-dailies-goto-today)
+(global-set-key (kbd "C-c r i") 'org-roam-node-insert)
+(global-set-key (kbd "C-c r r") 'org-roam-buffer)
+(global-set-key (kbd "C-c r f") 'org-roam-node-find)
+(global-set-key (kbd "C-c r n") 'org-roam-dailies-goto-next-note)
+(global-set-key (kbd "C-c r p") 'org-roam-dailies-goto-previous-note)
 
 (add-to-list 'display-buffer-alist
              '("\\*org-roam\\*"
@@ -187,7 +192,15 @@
     (end-of-buffer)
     (insert "\n* "))
 
-(define-key org-mode-map (kbd "C-z RET") 'psalm-insert-header-eof)
+(defun psalm-archive-subtree () ""
+       (interactive)
+       (org-cut-subtree)
+       (org-roam-dailies-goto-today)
+       (end-of-buffer)
+       (yank)
+       (previous-buffer))
+
+(define-key org-mode-map (kbd "C-c RET") 'psalm-insert-header-eof)
 
 (setq org-agenda-files (list org-directory org-roam-directory (concat org-roam-directory org-roam-dailies-directory))
       org-refile-targets '((nil :maxlevel . 10))
