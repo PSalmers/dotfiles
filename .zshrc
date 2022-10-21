@@ -1,6 +1,10 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
-export PATH=$PATH:$HOME/doom-emacs/bin:$HOME/.local/bin:$HOME/.gem/ruby/2.6.0/bin
+export PATH=$PATH:$HOME/doom-emacs/bin:$HOME/.local/bin
+Gems: Add to bashrc/zshrc to add gems to path
+if which ruby >/dev/null && which gem >/dev/null; then
+   PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
+fi
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
