@@ -44,7 +44,12 @@
 (use-package exec-path-from-shell
   :config
   (exec-path-from-shell-initialize))
-(use-package yafolding)
+(use-package yafolding
+  :config
+  (global-set-key (kbd "C-c h h") 'yafolding-hide-element)
+  (global-set-key (kbd "C-c h H") 'yafolding-hide-all)
+  (global-set-key (kbd "C-c h s") 'yafolding-show-element)
+  (global-set-key (kbd "C-c h S") 'yafolding-show-all))
 (use-package avy
   :config
   (global-set-key (kbd "C-c ;") 'avy-goto-char-timer)
