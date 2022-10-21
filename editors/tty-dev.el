@@ -47,9 +47,9 @@
 (use-package yafolding)
 (use-package avy
   :config
-  (global-set-key (kbd "C-;") 'avy-goto-char-timer)
-  (global-set-key (kbd "C-S-p") 'avy-goto-line-above)
-  (global-set-key (kbd "C-S-n") 'avy-goto-line-below))
+  (global-set-key (kbd "C-c ;") 'avy-goto-char-timer)
+  (global-set-key (kbd "M-p") 'avy-goto-line-above)
+  (global-set-key (kbd "M-n") 'avy-goto-line-below))
 
 ;; Keeps customizations from polluting my init
 (setq custom-file (concat user-emacs-directory "/custom.el"))
