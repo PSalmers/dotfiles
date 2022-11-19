@@ -37,7 +37,7 @@
   fallthrough true
 )
 
-(defalias esc_ctl  (tap-hold-next-release 200 esc lctl)
+(defalias esc_ctl  (tap-hold-next 200 esc lctl)
 	  firefox  (cmd-button "focus-window firefox")
 	  discord  (cmd-button "focus-window discord")
 	  emacs    (cmd-button "focus-window emacs")
