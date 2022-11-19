@@ -19,7 +19,7 @@
 
   -------------------------------------------------------------------------- |#
 (defcfg
-  input (device-file "/dev/input/event14")
+  input (device-file "/dev/input/event15")
   output (uinput-sink "KMonad output")
 
   fallthrough true
