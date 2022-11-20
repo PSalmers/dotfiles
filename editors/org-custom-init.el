@@ -1,3 +1,4 @@
+(setq visible-bell t)
 
 ;; Disable interface bt default
 (if window-system (tool-bar-mode 0) nil)
@@ -5,6 +6,13 @@
 
 ;; this makes the screen startup fullscreen but does not let you resize the window after
 ;; (setq initial-frame-alist '((fullscreen . maximized)))
+
+;; Windmove
+(global-set-key (kbd "C-c C-<right>") 'windmove-right)
+(global-set-key (kbd "C-c C-<left>") 'windmove-left)
+(global-set-key (kbd "C-c C-<up>") 'windmove-up)
+(global-set-key (kbd "C-c C-<down>") 'windmove-down)
+(setq windmove-create-window t)
 
 ;; Dired
 (setq dired-dwim-target t)
