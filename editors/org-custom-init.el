@@ -114,10 +114,13 @@
     (setq cursor-type (if (or god-local-mode buffer-read-only) 'box 'bar)))
   (add-hook 'post-command-hook #'my-god-mode-update-cursor-type)
   (global-set-key (kbd "<escape>") #'god-mode-all)
+  (global-set-key (kbd "M-o") #'god-mode-all)
   (define-key god-local-mode-map (kbd "i") #'god-local-mode)
   (require 'god-mode-isearch)
   (define-key isearch-mode-map (kbd "<escape>") #'god-mode-isearch-activate)
-  (define-key god-mode-isearch-map (kbd "<escape>") #'god-mode-isearch-disable))
+  (define-key isearch-mode-map (kbd "M-o") #'god-mode-isearch-activate)
+  (define-key god-mode-isearch-map (kbd "<escape>") #'god-mode-isearch-disable)
+  (define-key god-mode-isearch-map (kbd "M-o") #'god-mode-isearch-disable))
 
 (use-package spin
   :if (file-exists-p "~/src/github.com/Shopify/spin.el")
