@@ -57,19 +57,19 @@
 
 (setq package-list
       '(avy
-	plantuml-mode
-	magit
-	use-package
-	popup
-	fancy-dabbrev
 	counsel
+	fancy-dabbrev
+	god-mode
 	ivy
-	which-key
-	hydra
-	swiper
+	magit
 	org-roam ; Roam is a bit heavyweight, but I know it supports all the workflows I need
+	plantuml-mode
+	popup
+	swiper
+	use-package
+	which-key
 	; visual-fill-column ; This mode does not indent the fill column in org-indent mode
-       ))
+	))
 
 (package-initialize)
 
@@ -99,17 +99,27 @@
       ; needed for project to work vc-handled-backends (remove 'Git vc-handled-backends) ; very slow over ssh, and I use magit anyways
       )
 (require 'use-package)
+
+(use-package god-mode
+  :config
+  (defun my-god-mode-update-cursor-type ()
+    (setq cursor-type (if (or god-local-mode buffer-read-only) 'box 'bar)))
+  (add-hook 'post-command-hook #'my-god-mode-update-cursor-type)
+  (global-set-key (kbd "<escape>") #'god-mode-all)
+  (define-key god-local-mode-map (kbd "i") #'god-local-mode)
+  (require 'god-mode-isearch)
+  (define-key isearch-mode-map (kbd "<escape>") #'god-mode-isearch-activate)
+  (define-key god-mode-isearch-map (kbd "<escape>") #'god-mode-isearch-disable))
+
 (use-package spin
   :if (file-exists-p "~/src/github.com/Shopify/spin.el")
   :load-path "~/src/github.com/Shopify/spin.el")
-
 
 ;; Avy Settings
 (require 'avy)
 (global-set-key (kbd "C-;") 'avy-goto-char-timer)
 (global-set-key (kbd "C-S-p") 'avy-goto-line-above)
 (global-set-key (kbd "C-S-n") 'avy-goto-line-below)
-
 
 ;; Fancy Dabbrev
 ;; Load fancy-dabbrev.el:
@@ -305,3 +315,4 @@
 (setq org-babel-default-header-args:plantuml
       (cons '(:java . "-Dplantuml.include.path=\"/Users/psalmers/src/C4-PlantUML\"")
 	    (assq-delete-all :java org-babel-default-header-args:plantuml)))
+
