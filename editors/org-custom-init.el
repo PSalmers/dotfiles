@@ -120,7 +120,25 @@
   (define-key isearch-mode-map (kbd "<escape>") #'god-mode-isearch-activate)
   (define-key isearch-mode-map (kbd "M-o") #'god-mode-isearch-activate)
   (define-key god-mode-isearch-map (kbd "<escape>") #'god-mode-isearch-disable)
-  (define-key god-mode-isearch-map (kbd "M-o") #'god-mode-isearch-disable))
+  (define-key god-mode-isearch-map (kbd "M-o") #'god-mode-isearch-disable)
+  (defun my-god-mode-update-mode-line ()
+    (cond
+     (god-local-mode
+      (set-face-attribute 'mode-line nil
+                          :foreground "#604000"
+                          :background "#fff29a")
+      (set-face-attribute 'mode-line-inactive nil
+                          :foreground "#3f3000"
+                          :background "#fff3da"))
+     (t
+      (set-face-attribute 'mode-line nil
+			  :foreground "#0a0a0a"
+			  :background "#d7d7d7")
+      (set-face-attribute 'mode-line-inactive nil
+			  :foreground "#404148"
+			  :background "#efefef"))))
+
+  (add-hook 'post-command-hook 'my-god-mode-update-mode-line))
 
 (use-package spin
   :if (file-exists-p "~/src/github.com/Shopify/spin.el")
