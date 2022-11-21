@@ -1,8 +1,10 @@
 (setq visible-bell t)
 
-;; Disable interface bt default
+;; Interface defaults
 (if window-system (tool-bar-mode 0) nil)
 (menu-bar-mode 0)
+(xterm-mouse-mode 1)
+(global-display-line-numbers-mode)
 
 ;; this makes the screen startup fullscreen but does not let you resize the window after
 ;; (setq initial-frame-alist '((fullscreen . maximized)))
@@ -18,8 +20,12 @@
 (setq dired-dwim-target t)
 
 ;; Mac Hotkeys
-(setq mac-option-modifier 'control
-      mac-command-modifier 'meta)
+;; When using a mac-ish board
+;;(setq mac-option-modifier 'control
+;;      mac-command-modifier 'meta)
+
+;; When usiong a normal ANSI or ISO board
+(setq mac-option-modifier 'meta)
 
 ;; Custom global keys
 (global-set-key (kbd "C-c fi") (lambda () (interactive) (find-file "~/org-custom/init.el")))
@@ -29,7 +35,7 @@
 (global-set-key (kbd "M-z") 'zap-up-to-char)
 (global-set-key (kbd "C-.") 'repeat)
 
-(setq calendar-week-start-day 1)
+(setq calendar-week-start-day 0) ; The default value of "Sunday" keeps it consistent with more calendars around me.
 
 ;; Auto save
 (auto-save-visited-mode 1)
@@ -144,6 +150,7 @@
   :if (file-exists-p "~/src/github.com/Shopify/spin.el")
   :load-path "~/src/github.com/Shopify/spin.el")
 
+
 ;; Avy Settings
 (require 'avy)
 (global-set-key (kbd "C-;") 'avy-goto-char-timer)
@@ -236,9 +243,10 @@
        (org-cut-subtree)
        (org-roam-dailies-goto-today)
        (end-of-buffer)
-       (yank)
+       (org-paste-subtree 1)
        (previous-buffer))
 
+(define-key org-mode-map (kbd "C-c A") 'psalm-archive-subtree)
 (define-key org-mode-map (kbd "C-c RET") 'psalm-insert-header-eof)
 
 (setq org-agenda-files (list org-directory org-roam-directory (concat org-roam-directory org-roam-dailies-directory))
@@ -278,8 +286,7 @@
       org-journal-date-format "%A, %D"
       org-use-fast-todo-selection 'expert
       org-todo-keywords '((sequence "NEXT(n)" "WAIT(w@)" "|" "DONE(d)" "KILL(k@)")
-			  (type "PROJ(p)" "HOLD(h)" "IDEA(i)" "TODO(t)" "|")
-			  (sequence "SHAREABLE(s)" "|" "SHARED(S@)"))
+			  (type "PROJ(p)" "HOLD(h)" "IDEA(i)" "TODO(t)" "|"))
       ;; org-todo-keyword-faces `(("NEXT" . (:foreground ,(my-zenburn-colour "zenburn-bg")
       ;; 						      :background ,(my-zenburn-colour "zenburn-green")))
       ;; 			       ("DONE" . (:foreground ,(my-zenburn-colour "zenburn-bg")
