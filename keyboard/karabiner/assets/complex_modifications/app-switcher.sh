@@ -19,7 +19,7 @@ osascript -l JavaScript << EndOfScript
 
     app.activate();
 
-    if(appTab) {
+ if(appTab) {
         for (win of app.windows()) {
             var tabIndex = win.tabs().findIndex(tab => tab.url().match(new RegExp(appTab)));
             if (tabIndex != -1) {
