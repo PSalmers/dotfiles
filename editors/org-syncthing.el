@@ -1,3 +1,5 @@
+(setq psalm-sync-dir (if (eq system-type 'windows-nt) "C:/Users/patri/Sync/" "~/Sync/"))
+
 (setq visible-bell t)
 
 ;; Interface defaults
@@ -28,7 +30,7 @@
 (setq mac-option-modifier 'meta)
 
 ;; Custom global keys
-(global-set-key (kbd "C-c fi") (lambda () (interactive) (find-file "~/org-custom/init.el")))
+(global-set-key (kbd "C-c fi") (lambda () (interactive) (find-file (concat psalm-sync-dir "init.el"))))
 (global-set-key (kbd "C-c v") 'visual-line-mode)
 (global-set-key (kbd "C-c R") 'replace-string)
 
@@ -80,8 +82,8 @@
 	org-roam ; Roam is a bit heavyweight, but I know it supports all the workflows I need
 	plantuml-mode
 	popup
-	swiper
 	solarized-theme
+	swiper
 	use-package
 	which-key
 	; visual-fill-column ; This mode does not indent the fill column in org-indent mode
@@ -196,7 +198,7 @@
        (org-refile 1))
 (define-key org-mode-map (kbd "C-c C-j") 'counsel-org-goto)
 
-(setq org-directory "~/org")
+(setq org-directory (concat psalm-sync-dir "org"))
 
 ; Startup with org project open
 (setq inhibit-splash-screen t)
@@ -259,7 +261,9 @@
 (define-key org-mode-map (kbd "C-c A") 'psalm-archive-subtree)
 (define-key org-mode-map (kbd "C-c RET") 'psalm-insert-header-eof)
 
-(setq org-agenda-files (list org-directory org-roam-directory (concat org-roam-directory org-roam-dailies-directory))
+
+(setq org-agenda-files (list org-directory org-roam-directory (concat org-roam-directory)) ; I exclude org-roam-dailies-directory because it is too large and I do not typically schedule with it. Scheduling appointments in org is something I still need to work out.
+      org-catch-invisible-edits 'error
       org-refile-targets '((nil :maxlevel . 10))
       org-refile-use-outline-path t
       org-use-tag-inheritance nil
@@ -366,17 +370,17 @@
 			      
 ;; Plant UML Setup
 ;; active Org-babel languages
-(require 'plantuml-mode)
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '(;; other Babel languages
-   (plantuml . t)))
-(setq org-plantuml-jar-path (expand-file-name "~/src/plantuml.jar")
-      plantuml-default-exec-mode 'jar
-      plantuml-jar-path "~/src/plantuml.jar")
-;; This value will also need to be passed as a :java header argument to plantuml src blocks
-(add-to-list 'plantuml-java-args "-Dplantuml.include.path=\"/Users/psalmers/src/C4-PlantUML\"")
-(setq org-babel-default-header-args:plantuml
-      (cons '(:java . "-Dplantuml.include.path=\"/Users/psalmers/src/C4-PlantUML\"")
-	    (assq-delete-all :java org-babel-default-header-args:plantuml)))
+;; (require 'plantuml-mode)
+;; (org-babel-do-load-languages
+;;  'org-babel-load-languages
+;;  '(;; other Babel languages
+;;    (plantuml . t)))
+;; (setq org-plantuml-jar-path (expand-file-name "~/src/plantuml.jar")
+;;       plantuml-default-exec-mode 'jar
+;;       plantuml-jar-path "~/src/plantuml.jar")
+;; ;; This value will also need to be passed as a :java header argument to plantuml src blocks
+;; (add-to-list 'plantuml-java-args "-Dplantuml.include.path=\"/Users/psalmers/src/C4-PlantUML\"")
+;; (setq org-babel-default-header-args:plantuml
+;;       (cons '(:java . "-Dplantuml.include.path=\"/Users/psalmers/src/C4-PlantUML\"")
+;; 	    (assq-delete-all :java org-babel-default-header-args:plantuml)))
 
