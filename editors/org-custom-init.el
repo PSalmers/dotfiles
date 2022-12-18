@@ -30,6 +30,7 @@
 ;; Custom global keys
 (global-set-key (kbd "C-c fi") (lambda () (interactive) (find-file "~/org-custom/init.el")))
 (global-set-key (kbd "C-c v") 'visual-line-mode)
+(global-set-key (kbd "C-c R") 'replace-string)
 
 ;; Text editing tweaks
 (global-set-key (kbd "M-z") 'zap-up-to-char)
