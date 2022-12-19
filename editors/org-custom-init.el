@@ -162,6 +162,7 @@
 (global-set-key (kbd "C-;") 'avy-goto-char-timer)
 (global-set-key (kbd "C-S-p") 'avy-goto-line-above)
 (global-set-key (kbd "C-S-n") 'avy-goto-line-below)
+(global-set-key (kbd "C-S-k") 'avy-kill-region)
 
 ;; Fancy Dabbrev
 ;; Load fancy-dabbrev.el:
