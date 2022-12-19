@@ -78,6 +78,7 @@
 	ivy
 	magit
 	org-roam ; Roam is a bit heavyweight, but I know it supports all the workflows I need
+	ob-mermaid
 	plantuml-mode
 	popup
 	swiper
@@ -105,7 +106,7 @@
 ;; (load-theme 'modus-operandi t)
 
 ;; Selenized
-(load-theme 'solarized-selenized-light-theme t)
+(load-theme 'solarized-selenized-light t)
 
 ;; Zenburn
 ;;(load-theme 'zenburn t)
@@ -258,6 +259,13 @@
 
 (define-key org-mode-map (kbd "C-c A") 'psalm-archive-subtree)
 (define-key org-mode-map (kbd "C-c RET") 'psalm-insert-header-eof)
+(define-key org-mode-map (kbd "C-c n") 'org-next-item)
+(define-key org-mode-map (kbd "C-c p") 'org-previous-item)
+
+(defun psalm-org-end-of-meta-data () ""
+       (interactive)
+       (org-end-of-meta-data))
+(define-key org-mode-map (kbd "C-c i") 'psalm-org-end-of-meta-data)
 
 (setq org-agenda-files (list org-directory org-roam-directory (concat org-roam-directory org-roam-dailies-directory))
       org-refile-targets '((nil :maxlevel . 10))
@@ -272,6 +280,7 @@
       org-speed-commands-user '(("g" . '(org-refile 1))
 				("d" . org-deadline)
 				("s" . org-schedule)
+				("i" . psalm-org-end-of-meta-data)
 				("x" . org-capture))
       org-agenda-custom-commands '(("n" "Next Actions" todo "NEXT")
 				   ("d" "Schedule and NEXT" ((agenda "" ((org-agenda-span 'day)))
@@ -297,34 +306,6 @@
       org-use-fast-todo-selection 'expert
       org-todo-keywords '((sequence "NEXT(n)" "WAIT(w@)" "|" "DONE(d)" "KILL(k@)")
 			  (type "PROJ(p)" "HOLD(h)" "IDEA(i)" "TODO(t)" "|"))
-      ;; org-todo-keyword-faces `(("NEXT" . (:foreground ,(my-zenburn-colour "zenburn-bg")
-      ;; 						      :background ,(my-zenburn-colour "zenburn-green")))
-      ;; 			       ("DONE" . (:foreground ,(my-zenburn-colour "zenburn-bg")
-      ;; 						      :background ,(my-zenburn-colour "zenburn-bg+2")))
-      ;; 			       ("KILL" . (:foreground ,(my-zenburn-colour "zenburn-bg")
-      ;; 						      :background ,(my-zenburn-colour "zenburn-red")))
-      ;; 			       ("PROJ" . (:foreground ,(my-zenburn-colour "zenburn-bg")
-      ;; 						      :background ,(my-zenburn-colour "zenburn-blue")))
-      ;; 			       ("WAIT" . (:foreground ,(my-zenburn-colour "zenburn-bg")
-      ;; 						      :background ,(my-zenburn-colour "zenburn-yellow")))
-      ;; 			       ("HOLD" . (:foreground ,(my-zenburn-colour "zenburn-bg")
-      ;; 						      :background ,(my-zenburn-colour "zenburn-yellow")))
-      ;; 			       ("IDEA" . (:foreground ,(my-zenburn-colour "zenburn-bg")
-      ;; 						      :background ,(my-zenburn-colour "zenburn-yellow"))))
-      ;; org-todo-keyword-faces `(("NEXT" . (:foreground ,(modus-themes-color 'fg-main)
-      ;; 						      :background ,(modus-themes-color 'green-subtle-bg)))
-      ;; 			       ("DONE" . (:foreground ,(modus-themes-color 'fg-dim)
-      ;; 						      :background ,(modus-themes-color 'bg-main)))
-      ;; 			       ("KILL" . (:foreground ,(modus-themes-color 'red-faint)
-      ;; 						      :background ,(modus-themes-color 'bg-main)))
-      ;; 			       ("PROJ" . (:foreground ,(modus-themes-color 'fg-main)
-      ;; 						      :background ,(modus-themes-color 'blue-subtle-bg)))
-      ;; 			       ("WAIT" . (:foreground ,(modus-themes-color 'fg-main)
-      ;; 						      :background ,(modus-themes-color 'yellow-subtle-bg)))
-      ;; 			       ("HOLD" . (:foreground ,(modus-themes-color 'fg-main)
-      ;; 						      :background ,(modus-themes-color 'yellow-subtle-bg)))
-      ;; 			       ("IDEA" . (:foreground ,(modus-themes-color 'fg-main)
-      ;; 						      :background ,(modus-themes-color 'magenta-subtle-bg))))
       org-todo-keyword-faces `(("NEXT" . (:foreground ,"black"
 						      :background ,"light green"))
 			       ("DONE" . (:foreground ,"dim gray"
@@ -363,14 +344,17 @@
 			       "- Activity :: %?\n- start-finish :: \n- Avg HR :: ")
 			      ("g" "Grocery" checkitem
 			       (file+headline "tasks.org" "Shopping List"))))
+
+;; Org-Babel
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '(;; other Babel languages
+   (plantuml . t)
+   (mermaid . t)))
 			      
 ;; Plant UML Setup
 ;; active Org-babel languages
 (require 'plantuml-mode)
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '(;; other Babel languages
-   (plantuml . t)))
 (setq org-plantuml-jar-path (expand-file-name "~/src/plantuml.jar")
       plantuml-default-exec-mode 'jar
       plantuml-jar-path "~/src/plantuml.jar")
@@ -379,4 +363,10 @@
 (setq org-babel-default-header-args:plantuml
       (cons '(:java . "-Dplantuml.include.path=\"/Users/psalmers/src/C4-PlantUML\"")
 	    (assq-delete-all :java org-babel-default-header-args:plantuml)))
+
+(add-to-list 'org-structure-template-alist '("p" . "src plantuml :file ~/Pictures/plantuml.png"))
+
+;; Mermaid Setup
+(setq ob-mermaid-cli-path "/opt/homebrew/bin/mmdc")
+(add-to-list 'org-structure-template-alist '("m" . "src mermaid :file ~/Pictures/mermaid.png"))
 
