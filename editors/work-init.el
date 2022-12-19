@@ -81,6 +81,7 @@
 	ob-mermaid
 	plantuml-mode
 	popup
+	smex
 	swiper
 	solarized-theme
 	use-package
@@ -97,6 +98,7 @@
 
 (counsel-mode)
 (ivy-mode)
+(setq ivy-re-builders-alist '((t . ivy--regex-ignore-order)))
 (global-set-key (kbd "C-c s") 'swiper)
 (global-set-key (kbd "C-x b") 'counsel-switch-buffer)
 
@@ -185,6 +187,15 @@
 ;; Org Configuration
 (require 'org)
 
+
+(defun org-id-complete-link (&optional arg)
+  "Create an id: link using completion"
+  (concat "id:"
+          (org-id-get-with-outline-path-completion)))
+
+(org-link-set-parameters "id"
+			 :complete 'org-id-complete-link)
+
 (global-set-key (kbd "C-c o c") 'org-capture)
 (global-set-key (kbd "C-c o s") 'org-store-link)
 (global-set-key (kbd "C-c o a") 'org-agenda)
@@ -265,7 +276,7 @@
 
 (defun psalm-org-end-of-meta-data () ""
        (interactive)
-       (org-end-of-meta-data))
+       (org-end-of-meta-data t))
 (define-key org-mode-map (kbd "C-c i") 'psalm-org-end-of-meta-data)
 
 (setq org-agenda-files (list org-directory org-roam-directory (concat org-roam-directory org-roam-dailies-directory))
