@@ -77,7 +77,6 @@
 	god-mode
 	ivy
 	magit
-	org-roam ; Roam is a bit heavyweight, but I know it supports all the workflows I need
 	ob-mermaid
 	plantuml-mode
 	popup
@@ -213,11 +212,11 @@
 
 ; Startup with org project open
 (setq inhibit-splash-screen t)
-(defun psalm-startup ()
+(defun psalm/startup ()
   (interactive)
   (org-agenda nil "d")
   (delete-other-windows))
-(add-hook 'window-setup-hook 'psalm-startup)
+(add-hook 'window-setup-hook 'psalm/startup)
 
 ; Using personal dictionary
 (setq ispell-personal-dictionary (concat org-directory "/.aspell.en.pws"))
@@ -225,61 +224,43 @@
 ;; Resetting checkboxes
 (define-key org-mode-map (kbd "C-c b") 'org-reset-checkbox-state-subtree)
 
-;; Org Roam settings
-(setq org-roam-directory (concat org-directory "/roam/")
-      org-roam-dailies-directory "daily/"
-      ;; I use the capture function for quick clocking. org-roam-dailies only supports one template without being breaky, seemingly capture is used to go to the current date as well.
-      org-roam-dailies-capture-templates '(("d" "default" entry
-					    "* %?"
-					    :target (file+head "%<%Y-%m-%d>.org"
-							       "#+title: %<%Y-%m-%d>\n")
-					    :clock-in t
-					    :clock-keep t
-					    :jump-to-captured)))
-
-(global-set-key (kbd "C-c r t") 'org-roam-dailies-goto-today)
-(global-set-key (kbd "C-c r i") 'org-roam-node-insert)
-(global-set-key (kbd "C-c r r") 'org-roam-buffer)
-(global-set-key (kbd "C-c r f") 'org-roam-node-find)
-(global-set-key (kbd "C-c r n") 'org-roam-dailies-goto-next-note)
-(global-set-key (kbd "C-c r p") 'org-roam-dailies-goto-previous-note)
-(global-set-key (kbd "C-c r c") 'org-roam-dailies-capture-today)
-
-(add-to-list 'display-buffer-alist
-             '("\\*org-roam\\*"
-               (display-buffer-in-direction)
-               (direction . right)
-               (window-width . 0.33)
-               (window-height . fit-window-to-buffer)))
-
-
 (add-to-list 'org-modules 'org-habit)
 (add-to-list 'org-modules 'org-id)
 
-(defun psalm-insert-header-eof () ""
+(defun psalm/insert-header-eof () ""
     (interactive)
     (end-of-buffer)
     (insert "\n* "))
 
-(defun psalm-archive-subtree () ""
-       (interactive)
-       (org-cut-subtree)
-       (org-roam-dailies-goto-today)
-       (end-of-buffer)
-       (org-paste-subtree 1)
-       (previous-buffer))
-
-(define-key org-mode-map (kbd "C-c A") 'psalm-archive-subtree)
-(define-key org-mode-map (kbd "C-c RET") 'psalm-insert-header-eof)
+(define-key org-mode-map (kbd "C-c RET") 'psalm/insert-header-eof)
 (define-key org-mode-map (kbd "C-c n") 'org-next-item)
 (define-key org-mode-map (kbd "C-c p") 'org-previous-item)
 
-(defun psalm-org-end-of-meta-data () ""
+(defun psalm/org-end-of-meta-data () ""
        (interactive)
        (org-end-of-meta-data t))
-(define-key org-mode-map (kbd "C-c i") 'psalm-org-end-of-meta-data)
 
-(setq org-agenda-files (list org-directory org-roam-directory (concat org-roam-directory org-roam-dailies-directory))
+;; org-archive functions from stack overflow
+(defun psalm/org-archive-delete-logbook ()
+  (save-excursion
+   (org-end-of-meta-data)
+   (let ((elm (org-element-at-point)))
+     (when (and
+            (equal (org-element-type elm) 'drawer)
+            (equal (org-element-property :drawer-name elm) "LOGBOOK"))
+       (delete-region (org-element-property :begin elm)
+                      (org-element-property :end elm))))))
+
+(defun psalm/org-archive-without-delete ()
+  (cl-letf (((symbol-function 'org-cut-subtree) (lambda () nil)))
+    (org-archive-subtree-default)))
+
+(defun psalm/org-archive-logbook ()
+  (interactive)
+  (psalm/org-archive-without-delete)
+  (psalm/org-archive-delete-logbook))
+
+(setq org-agenda-files (list org-directory (concat org-directory "/archive/"))
       org-refile-targets '((nil :maxlevel . 10))
       org-refile-use-outline-path t
       org-use-tag-inheritance nil
@@ -289,32 +270,37 @@
 				 ("references" . ?r)
 				 ("obsolete" . ?o))
       org-use-speed-commands t
-      org-speed-commands-user '(("g" . '(org-refile 1))
-				("d" . org-deadline)
-				("s" . org-schedule)
-				("i" . psalm-org-end-of-meta-data)
-				("x" . org-capture))
+      org-speed-commands (nconc '(("User Commands")
+				  ("d" . org-deadline)
+				  ("s" . org-schedule)
+				  ("e" . move-end-of-line)
+				  ("E" . psalm/org-end-of-meta-data)
+				  ("A" . psalm/org-archive-logbook)
+				  ("x" . org-capture))
+				 org-speed-commands)
       org-agenda-custom-commands '(("n" "Next Actions" todo "NEXT")
 				   ("d" "Schedule and NEXT" ((agenda "" ((org-agenda-span 'day)))
-							     (todo "NEXT"))))
+							     (todo "NEXT")
+							     (todo "WAIT"))))
       org-startup-indented t
       org-link-frame-setup '((file . find-file)) ; opens links to org file in same window
       org-indent-mode-hides-stars t
+      org-archive-location (concat org-directory "/journal.org::datetree/")
+      org-archive-save-context-info nil
       org-attach-store-link-p t
       org-attach-auto-tag nil
       org-attach-id-dir (concat org-directory "/data/")
       org-attach-use-inheritance t
       org-image-actual-width (list 500)
       org-agenda-dim-blocked-tasks nil ;; Disabled because I am using NEXT
-      org-agenda-todo-ignore-scheduled `future
+      org-agenda-todo-ignore-scheduled 'future
       org-agenda-todo-ignore-time-comparison-use-seconds t
       org-agenda-skip-deadline-prewarning-if-scheduled t
       org-agenda-skip-deadline-prewarning-if-done t
       org-agenda-skip-deadline-if-done t
       org-log-into-drawer t
-      org-log-done `time
+      org-log-done 'time
       org-agenda-show-future-repeats nil
-      org-journal-date-format "%A, %D"
       org-use-fast-todo-selection 'expert
       org-todo-keywords '((sequence "NEXT(n)" "WAIT(w@)" "|" "DONE(d)" "KILL(k@)")
 			  (type "PROJ(p)" "HOLD(h)" "IDEA(i)" "TODO(t)" "|"))
@@ -340,14 +326,14 @@
       org-id-link-to-org-use-id t)
 
 (setq org-capture-templates '(("i" "inbox" entry
-			       (file "inbox.org")
+			       (file+olp "staging.org" "Inbox")
 			       "* %u %?" :prepend t)
 			      ("n" "Next Action" entry
-			       (file "tasks.org")
+			       (file+olp "staging.org" "Tasks")
 			       "* NEXT %?")
 			      ("j" "Journal note" entry
 			       (file+olp+datetree "journal.org")
-			       "* %U %?\n%i\n%a\n** NEXT Process this note" :jump-to-captured t)
+			       "* Journal" :jump-to-captured t)
 			      ("s" "Sleep Journal" plain
 			       (file+olp+datetree "sleep-journal.org")
 			       "- start-finish of attempt :: %?\n- medicine used :: \n- Restedness 1-10 :: ")
@@ -355,7 +341,7 @@
 			       (file+olp+datetree "fitness-journal.org")
 			       "- Activity :: %?\n- start-finish :: \n- Avg HR :: ")
 			      ("g" "Grocery" checkitem
-			       (file+headline "tasks.org" "Shopping List"))))
+			       (file+headline "staging.org" "Shopping List"))))
 
 ;; Org-Babel
 (org-babel-do-load-languages
