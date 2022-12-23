@@ -79,11 +79,12 @@
 	god-mode
 	ivy
 	magit
-	org-roam ; Roam is a bit heavyweight, but I know it supports all the workflows I need
+	ob-mermaid
 	plantuml-mode
 	popup
-	solarized-theme
+	smex
 	swiper
+	solarized-theme
 	use-package
 	which-key
 	; visual-fill-column ; This mode does not indent the fill column in org-indent mode
@@ -98,6 +99,7 @@
 
 (counsel-mode)
 (ivy-mode)
+(setq ivy-re-builders-alist '((t . ivy--regex-ignore-order)))
 (global-set-key (kbd "C-c s") 'swiper)
 (global-set-key (kbd "C-x b") 'counsel-switch-buffer)
 
@@ -107,7 +109,7 @@
 ;; (load-theme 'modus-operandi t)
 
 ;; Selenized
-(load-theme 'solarized-selenized-light-theme t)
+(load-theme 'solarized-selenized-light t)
 
 ;; Zenburn
 ;;(load-theme 'zenburn t)
@@ -163,6 +165,7 @@
 (global-set-key (kbd "C-;") 'avy-goto-char-timer)
 (global-set-key (kbd "C-S-p") 'avy-goto-line-above)
 (global-set-key (kbd "C-S-n") 'avy-goto-line-below)
+(global-set-key (kbd "C-S-k") 'avy-kill-region)
 
 ;; Fancy Dabbrev
 ;; Load fancy-dabbrev.el:
@@ -185,6 +188,15 @@
 ;; Org Configuration
 (require 'org)
 
+
+(defun org-id-complete-link (&optional arg)
+  "Create an id: link using completion"
+  (concat "id:"
+          (org-id-get-with-outline-path-completion)))
+
+(org-link-set-parameters "id"
+			 :complete 'org-id-complete-link)
+
 (global-set-key (kbd "C-c o c") 'org-capture)
 (global-set-key (kbd "C-c o s") 'org-store-link)
 (global-set-key (kbd "C-c o a") 'org-agenda)
@@ -202,11 +214,11 @@
 
 ; Startup with org project open
 (setq inhibit-splash-screen t)
-(defun psalm-startup ()
+(defun psalm/startup ()
   (interactive)
   (org-agenda nil "d")
   (delete-other-windows))
-(add-hook 'window-setup-hook 'psalm-startup)
+(add-hook 'window-setup-hook 'psalm/startup)
 
 ; Using personal dictionary
 (setq ispell-personal-dictionary (concat org-directory "/.aspell.en.pws"))
@@ -214,56 +226,43 @@
 ;; Resetting checkboxes
 (define-key org-mode-map (kbd "C-c b") 'org-reset-checkbox-state-subtree)
 
-;; Org Roam settings
-(setq org-roam-directory (concat org-directory "/roam/")
-      org-roam-dailies-directory "daily/"
-      ;; I use the capture function for quick clocking. org-roam-dailies only supports one template without being breaky, seemingly capture is used to go to the current date as well.
-      org-roam-dailies-capture-templates '(("d" "default" entry
-					    "* %?"
-					    :target (file+head "%<%Y-%m-%d>.org"
-							       "#+title: %<%Y-%m-%d>\n")
-					    :clock-in t
-					    :clock-keep t
-					    :jump-to-captured)))
-
-(global-set-key (kbd "C-c r t") 'org-roam-dailies-goto-today)
-(global-set-key (kbd "C-c r i") 'org-roam-node-insert)
-(global-set-key (kbd "C-c r r") 'org-roam-buffer)
-(global-set-key (kbd "C-c r f") 'org-roam-node-find)
-(global-set-key (kbd "C-c r n") 'org-roam-dailies-goto-next-note)
-(global-set-key (kbd "C-c r p") 'org-roam-dailies-goto-previous-note)
-(global-set-key (kbd "C-c r c") 'org-roam-dailies-capture-today)
-
-(add-to-list 'display-buffer-alist
-             '("\\*org-roam\\*"
-               (display-buffer-in-direction)
-               (direction . right)
-               (window-width . 0.33)
-               (window-height . fit-window-to-buffer)))
-
-
 (add-to-list 'org-modules 'org-habit)
 (add-to-list 'org-modules 'org-id)
 
-(defun psalm-insert-header-eof () ""
+(defun psalm/insert-header-eof () ""
     (interactive)
     (end-of-buffer)
     (insert "\n* "))
 
-(defun psalm-archive-subtree () ""
+(define-key org-mode-map (kbd "C-c RET") 'psalm/insert-header-eof)
+(define-key org-mode-map (kbd "C-c n") 'org-next-item)
+(define-key org-mode-map (kbd "C-c p") 'org-previous-item)
+
+(defun psalm/org-end-of-meta-data () ""
        (interactive)
-       (org-cut-subtree)
-       (org-roam-dailies-goto-today)
-       (end-of-buffer)
-       (org-paste-subtree 1)
-       (previous-buffer))
+       (org-end-of-meta-data t))
 
-(define-key org-mode-map (kbd "C-c A") 'psalm-archive-subtree)
-(define-key org-mode-map (kbd "C-c RET") 'psalm-insert-header-eof)
+;; org-archive functions from stack overflow
+(defun psalm/org-archive-delete-logbook ()
+  (save-excursion
+   (org-end-of-meta-data)
+   (let ((elm (org-element-at-point)))
+     (when (and
+            (equal (org-element-type elm) 'drawer)
+            (equal (org-element-property :drawer-name elm) "LOGBOOK"))
+       (delete-region (org-element-property :begin elm)
+                      (org-element-property :end elm))))))
 
+(defun psalm/org-archive-without-delete ()
+  (cl-letf (((symbol-function 'org-cut-subtree) (lambda () nil)))
+    (org-archive-subtree-default)))
 
-(setq org-agenda-files (list org-directory org-roam-directory (concat org-roam-directory)) ; I exclude org-roam-dailies-directory because it is too large and I do not typically schedule with it. Scheduling appointments in org is something I still need to work out.
-      org-catch-invisible-edits 'error
+(defun psalm/org-archive-logbook ()
+  (interactive)
+  (psalm/org-archive-without-delete)
+  (psalm/org-archive-delete-logbook))
+
+(setq org-agenda-files (list org-directory (concat org-directory "/archive/"))
       org-refile-targets '((nil :maxlevel . 10))
       org-refile-use-outline-path t
       org-use-tag-inheritance nil
@@ -273,62 +272,40 @@
 				 ("references" . ?r)
 				 ("obsolete" . ?o))
       org-use-speed-commands t
-      org-speed-commands-user '(("g" . '(org-refile 1))
-				("d" . org-deadline)
-				("s" . org-schedule)
-				("x" . org-capture))
+      org-speed-commands (nconc '(("User Commands")
+				  ("d" . org-deadline)
+				  ("s" . org-schedule)
+				  ("e" . move-end-of-line)
+				  ("E" . psalm/org-end-of-meta-data)
+				  ("A" . psalm/org-archive-logbook)
+				  ("x" . org-capture))
+				 org-speed-commands)
       org-agenda-custom-commands '(("n" "Next Actions" todo "NEXT")
 				   ("d" "Schedule and NEXT" ((agenda "" ((org-agenda-span 'day)))
-							     (todo "NEXT"))))
+							     (todo "NEXT")
+							     (todo "WAIT"))))
       org-startup-indented t
       org-link-frame-setup '((file . find-file)) ; opens links to org file in same window
       org-indent-mode-hides-stars t
+      org-archive-location (concat org-directory "/journal.org::datetree/")
+      org-archive-save-context-info nil
       org-attach-store-link-p t
       org-attach-auto-tag nil
       org-attach-id-dir (concat org-directory "/data/")
       org-attach-use-inheritance t
       org-image-actual-width (list 500)
       org-agenda-dim-blocked-tasks nil ;; Disabled because I am using NEXT
-      org-agenda-todo-ignore-scheduled `future
+      org-agenda-todo-ignore-scheduled 'future
       org-agenda-todo-ignore-time-comparison-use-seconds t
       org-agenda-skip-deadline-prewarning-if-scheduled t
       org-agenda-skip-deadline-prewarning-if-done t
       org-agenda-skip-deadline-if-done t
       org-log-into-drawer t
-      org-log-done `time
+      org-log-done 'time
       org-agenda-show-future-repeats nil
-      org-journal-date-format "%A, %D"
       org-use-fast-todo-selection 'expert
       org-todo-keywords '((sequence "NEXT(n)" "WAIT(w@)" "|" "DONE(d)" "KILL(k@)")
 			  (type "PROJ(p)" "HOLD(h)" "IDEA(i)" "TODO(t)" "|"))
-      ;; org-todo-keyword-faces `(("NEXT" . (:foreground ,(my-zenburn-colour "zenburn-bg")
-      ;; 						      :background ,(my-zenburn-colour "zenburn-green")))
-      ;; 			       ("DONE" . (:foreground ,(my-zenburn-colour "zenburn-bg")
-      ;; 						      :background ,(my-zenburn-colour "zenburn-bg+2")))
-      ;; 			       ("KILL" . (:foreground ,(my-zenburn-colour "zenburn-bg")
-      ;; 						      :background ,(my-zenburn-colour "zenburn-red")))
-      ;; 			       ("PROJ" . (:foreground ,(my-zenburn-colour "zenburn-bg")
-      ;; 						      :background ,(my-zenburn-colour "zenburn-blue")))
-      ;; 			       ("WAIT" . (:foreground ,(my-zenburn-colour "zenburn-bg")
-      ;; 						      :background ,(my-zenburn-colour "zenburn-yellow")))
-      ;; 			       ("HOLD" . (:foreground ,(my-zenburn-colour "zenburn-bg")
-      ;; 						      :background ,(my-zenburn-colour "zenburn-yellow")))
-      ;; 			       ("IDEA" . (:foreground ,(my-zenburn-colour "zenburn-bg")
-      ;; 						      :background ,(my-zenburn-colour "zenburn-yellow"))))
-      ;; org-todo-keyword-faces `(("NEXT" . (:foreground ,(modus-themes-color 'fg-main)
-      ;; 						      :background ,(modus-themes-color 'green-subtle-bg)))
-      ;; 			       ("DONE" . (:foreground ,(modus-themes-color 'fg-dim)
-      ;; 						      :background ,(modus-themes-color 'bg-main)))
-      ;; 			       ("KILL" . (:foreground ,(modus-themes-color 'red-faint)
-      ;; 						      :background ,(modus-themes-color 'bg-main)))
-      ;; 			       ("PROJ" . (:foreground ,(modus-themes-color 'fg-main)
-      ;; 						      :background ,(modus-themes-color 'blue-subtle-bg)))
-      ;; 			       ("WAIT" . (:foreground ,(modus-themes-color 'fg-main)
-      ;; 						      :background ,(modus-themes-color 'yellow-subtle-bg)))
-      ;; 			       ("HOLD" . (:foreground ,(modus-themes-color 'fg-main)
-      ;; 						      :background ,(modus-themes-color 'yellow-subtle-bg)))
-      ;; 			       ("IDEA" . (:foreground ,(modus-themes-color 'fg-main)
-      ;; 						      :background ,(modus-themes-color 'magenta-subtle-bg))))
       org-todo-keyword-faces `(("NEXT" . (:foreground ,"black"
 						      :background ,"light green"))
 			       ("DONE" . (:foreground ,"dim gray"
@@ -351,14 +328,14 @@
       org-id-link-to-org-use-id t)
 
 (setq org-capture-templates '(("i" "inbox" entry
-			       (file "inbox.org")
+			       (file+olp "staging.org" "Inbox")
 			       "* %u %?" :prepend t)
 			      ("n" "Next Action" entry
-			       (file "tasks.org")
+			       (file+olp "staging.org" "Tasks")
 			       "* NEXT %?")
 			      ("j" "Journal note" entry
 			       (file+olp+datetree "journal.org")
-			       "* %U %?\n%i\n%a\n** NEXT Process this note" :jump-to-captured t)
+			       "* Journal" :jump-to-captured t)
 			      ("s" "Sleep Journal" plain
 			       (file+olp+datetree "sleep-journal.org")
 			       "- start-finish of attempt :: %?\n- medicine used :: \n- Restedness 1-10 :: ")
@@ -366,21 +343,30 @@
 			       (file+olp+datetree "fitness-journal.org")
 			       "- Activity :: %?\n- start-finish :: \n- Avg HR :: ")
 			      ("g" "Grocery" checkitem
-			       (file+headline "tasks.org" "Shopping List"))))
+			       (file+headline "staging.org" "Shopping List"))))
+
+;; Org-Babel
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '(;; other Babel languages
+   (plantuml . t)
+   (mermaid . t)))
 			      
 ;; Plant UML Setup
 ;; active Org-babel languages
-;; (require 'plantuml-mode)
-;; (org-babel-do-load-languages
-;;  'org-babel-load-languages
-;;  '(;; other Babel languages
-;;    (plantuml . t)))
-;; (setq org-plantuml-jar-path (expand-file-name "~/src/plantuml.jar")
-;;       plantuml-default-exec-mode 'jar
-;;       plantuml-jar-path "~/src/plantuml.jar")
-;; ;; This value will also need to be passed as a :java header argument to plantuml src blocks
-;; (add-to-list 'plantuml-java-args "-Dplantuml.include.path=\"/Users/psalmers/src/C4-PlantUML\"")
-;; (setq org-babel-default-header-args:plantuml
-;;       (cons '(:java . "-Dplantuml.include.path=\"/Users/psalmers/src/C4-PlantUML\"")
-;; 	    (assq-delete-all :java org-babel-default-header-args:plantuml)))
+(require 'plantuml-mode)
+(setq org-plantuml-jar-path (expand-file-name "~/src/plantuml.jar")
+      plantuml-default-exec-mode 'jar
+      plantuml-jar-path "~/src/plantuml.jar")
+;; This value will also need to be passed as a :java header argument to plantuml src blocks
+(add-to-list 'plantuml-java-args "-Dplantuml.include.path=\"/Users/psalmers/src/C4-PlantUML\"")
+(setq org-babel-default-header-args:plantuml
+      (cons '(:java . "-Dplantuml.include.path=\"/Users/psalmers/src/C4-PlantUML\"")
+	    (assq-delete-all :java org-babel-default-header-args:plantuml)))
+
+(add-to-list 'org-structure-template-alist '("p" . "src plantuml :file ~/Pictures/plantuml.png"))
+
+;; Mermaid Setup
+(setq ob-mermaid-cli-path "/opt/homebrew/bin/mmdc")
+(add-to-list 'org-structure-template-alist '("m" . "src mermaid :file ~/Pictures/mermaid.png"))
 
