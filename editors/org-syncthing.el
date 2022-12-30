@@ -3,10 +3,17 @@
 (setq visible-bell t)
 
 ;; Interface defaults
-(if window-system (tool-bar-mode 0) nil)
-(menu-bar-mode 0)
+
+;; I want to work toward using the mouse more, so I am leaving these on to inspire mouse-based configuration.
+;; My reason for this is that it may be less cognitive overhead to click buttons, and less cognitive overhead is more resilient to age or illness.
+;;(if window-system (tool-bar-mode 0) nil)
+;;(menu-bar-mode 0)
+
 (xterm-mouse-mode 1)
 (global-display-line-numbers-mode)
+(cua-mode 1)
+(setq mouse-drag-and-drop-region t)
+
 
 ;; this makes the screen startup fullscreen but does not let you resize the window after
 ;; (setq initial-frame-alist '((fullscreen . maximized)))
@@ -69,8 +76,8 @@
 ;;(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 
 ; fetch the list of packages available. I have commented this out to avoid needlessly pinging melpa etc on startup
-;(unless package-archive-contents
-; (package-refresh-contents))
+(unless package-archive-contents
+ (package-refresh-contents))
 
 (setq package-list
       '(avy
@@ -262,7 +269,27 @@
   (psalm/org-archive-without-delete)
   (psalm/org-archive-delete-logbook))
 
-(setq org-agenda-files (list org-directory (concat org-directory "/archive/"))
+(defun psalm/org-insert-current-time-inactive ()
+  (interactive)
+  (org-time-stamp-inactive '(16)))
+(define-key org-mode-map (kbd "C-c T") 'psalm/org-insert-current-time-inactive)
+
+(defun psalm/org-table-insert-current-time ()
+  (interactive)
+  (insert (format-time-string "%H:%M:%S")))
+(define-key org-mode-map (kbd "C-c t") 'psalm/org-table-insert-current-time)
+
+(defun psalm/start-new-workout ()
+  (interactive)
+  (goto-char (org-table-end))
+  (backward-char)
+  (org-table-goto-column 1)
+  (org-return)
+  (psalm/org-insert-current-time-inactive)
+  (org-table-next-field))
+(define-key orgtbl-mode-map (kbd "C-c w") 'psalm/start-new-workout)
+
+(setq org-agenda-files (list org-directory (concat org-directory "/agenda/")) ; excludes /archive by default
       org-refile-targets '((nil :maxlevel . 10))
       org-refile-use-outline-path t
       org-use-tag-inheritance nil
