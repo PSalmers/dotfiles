@@ -8,6 +8,8 @@ osascript -l JavaScript << EndOfScript
             "Slack",
             "Chrome meet.google",
             "Chrome mail.google",
+            "Chrome calendar.google",
+	    "Chrome shopify.workplace",
         ][$1].split(" ")
     console.log("app choice " + appChoice)
     var appName = appChoice[0]

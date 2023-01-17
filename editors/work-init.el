@@ -1,10 +1,21 @@
 (setq visible-bell t)
 
 ;; Interface defaults
+
+;; I want to work toward using the mouse more, so I am leaving these on to inspire mouse-based configuration.
+;; My reason for this is that it may be less cognitive overhead to click buttons, and less cognitive overhead is more resilient to age or illness.
 (if window-system (tool-bar-mode 0) nil)
 (menu-bar-mode 0)
+
 (xterm-mouse-mode 1)
-(global-display-line-numbers-mode)
+
+;; This is mostly a problem for org-mode, which does not indent the line correctly when headers are folded
+;;(global-display-line-numbers-mode)
+
+;; I have found this annoying and unhelpful
+;;(cua-mode 1)
+(setq mouse-drag-and-drop-region t)
+
 
 ;; this makes the screen startup fullscreen but does not let you resize the window after
 ;; (setq initial-frame-alist '((fullscreen . maximized)))
@@ -292,7 +303,7 @@
       org-attach-id-dir (concat org-directory "/data/")
       org-attach-use-inheritance t
       org-image-actual-width (list 500)
-      org-agenda-dim-blocked-tasks nil ;; Disabled because I am using NEXT
+      org-agenda-dim-blocked-tasks t ;; +Disabled because I am using NEXT+ Enabled because I want my todos to be more automatically handled
       org-agenda-todo-ignore-scheduled 'future
       org-agenda-todo-ignore-time-comparison-use-seconds t
       org-agenda-skip-deadline-prewarning-if-scheduled t
@@ -333,7 +344,7 @@
 			       "* NEXT %?")
 			      ("j" "Journal note" entry
 			       (file+olp+datetree "journal.org")
-			       "* Journal" :jump-to-captured t)
+			       "* %u %?" :jump-to-captured t)
 			      ("s" "Sleep Journal" plain
 			       (file+olp+datetree "sleep-journal.org")
 			       "- start-finish of attempt :: %?\n- medicine used :: \n- Restedness 1-10 :: ")
