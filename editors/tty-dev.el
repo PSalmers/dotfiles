@@ -20,6 +20,7 @@
 (require 'use-package-ensure)
 (setq use-package-always-ensure t)
 (use-package quelpa-use-package)
+(require 'quelpa-use-package)
 (use-package eglot)
 (use-package rg)
 (use-package magit)
@@ -101,4 +102,4 @@
 
 (use-package solarized-theme
   :config
-  (load theme 'solarized-theme-selenized-light t))
+  (load theme solarized-selenized-light t))
