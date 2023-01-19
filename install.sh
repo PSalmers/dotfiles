@@ -8,4 +8,5 @@ sudo apt install emacs28-nox
 
 # Tmux
 ln -sf ~/dotfiles/.tmux.conf ~/.tmux.conf
+ln -sf ~/dotfiles/.zshrc ~/spin_zshrc
 

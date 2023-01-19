@@ -19,6 +19,8 @@
 (require 'use-package)
 (require 'use-package-ensure)
 (setq use-package-always-ensure t)
+(use-package eglot)
+(use-package rg)
 (use-package magit)
 (use-package ivy
   :config
