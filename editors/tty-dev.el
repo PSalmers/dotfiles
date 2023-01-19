@@ -83,7 +83,7 @@
 ;; https://github.com/orzechowskid/tsi.el/
 ;; great tree-sitter-based indentation for typescript/tsx, css, json
 (use-package tsi
-  :after tree-sitter
+  :after (quelpa-use-package tree-sitter)
   :quelpa (tsi :fetcher github :repo "orzechowskid/tsi.el")
   ;; define autoload definitions which when actually invoked will cause package to be loaded
   :commands (tsi-typescript-mode tsi-json-mode tsi-css-mode)
@@ -102,4 +102,4 @@
 
 (use-package solarized-theme
   :config
-  (load theme solarized-selenized-light t))
+  (load-theme 'solarized-selenized-light t))
