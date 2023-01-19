@@ -19,6 +19,7 @@
 (require 'use-package)
 (require 'use-package-ensure)
 (setq use-package-always-ensure t)
+(use-package quelpa-use-package)
 (use-package eglot)
 (use-package rg)
 (use-package magit)
