@@ -98,3 +98,7 @@
   :ensure t
   :config
   (apheleia-global-mode +1))
+
+(use-package solarized-theme
+  :config
+  (load theme 'solarized-theme-selenized-light t))
