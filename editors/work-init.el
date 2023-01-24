@@ -96,10 +96,15 @@
 	solarized-theme
 	use-package
 	which-key
+	quelpa
+	typescript-mode
+	exec-path-from-shell
 	; visual-fill-column ; This mode does not indent the fill column in org-indent mode
 	))
 
 (package-initialize)
+
+(exec-path-from-shell-initialize)
 
 ; install the missing packages
 (dolist (package package-list)
@@ -168,13 +173,18 @@
   :if (file-exists-p "~/src/github.com/Shopify/spin.el")
   :load-path "~/src/github.com/Shopify/spin.el")
 
+(require 'use-package-ensure)
+(setq use-package-always-ensure t)
+(use-package quelpa-use-package)
+(require 'quelpa-use-package)
 
-;; Avy Settings
-(require 'avy)
-(global-set-key (kbd "C-;") 'avy-goto-char-timer)
-(global-set-key (kbd "C-S-p") 'avy-goto-line-above)
-(global-set-key (kbd "C-S-n") 'avy-goto-line-below)
-(global-set-key (kbd "C-S-k") 'avy-kill-region)
+(use-package avy
+  :config
+  (setq avy-keys '(?a ?r ?s ?t ?o ?i ?e ?n ?d ?h))
+  (global-set-key (kbd "C-;") 'avy-goto-char-timer)
+  (global-set-key (kbd "C-S-p") 'avy-goto-line-above)
+  (global-set-key (kbd "C-S-n") 'avy-goto-line-below)
+  (global-set-key (kbd "C-S-k") 'avy-kill-region))
 
 ;; Fancy Dabbrev
 ;; Load fancy-dabbrev.el:
@@ -271,7 +281,7 @@
   (psalm/org-archive-without-delete)
   (psalm/org-archive-delete-logbook))
 
-(setq org-agenda-files (list org-directory (concat org-directory "/archive/"))
+(setq org-agenda-files (list org-directory (concat org-directory "/archive/") (concat org-directory "/projects/"))
       org-refile-targets '((nil :maxlevel . 10))
       org-refile-use-outline-path t
       org-use-tag-inheritance nil
@@ -279,6 +289,7 @@
       org-tags-column 0
       org-tag-persistent-alist '(("decisions" . ?d)
 				 ("references" . ?r)
+				 ("solved_problems" . ?s)
 				 ("obsolete" . ?o))
       org-use-speed-commands t
       org-speed-commands (nconc '(("User Commands")
@@ -344,7 +355,10 @@
 			       "* NEXT %?")
 			      ("j" "Journal note" entry
 			       (file+olp+datetree "journal.org")
-			       "* %u %?" :jump-to-captured t)
+			       "* %jump %?" :U-to-captured t)
+			      ("c" "Code Review" entry
+			       (file+headline "staging.org" "Code Reviewing Ideas")
+			       "* IDEA %u %?")
 			      ("s" "Sleep Journal" plain
 			       (file+olp+datetree "sleep-journal.org")
 			       "- start-finish of attempt :: %?\n- medicine used :: \n- Restedness 1-10 :: ")
@@ -379,3 +393,53 @@
 (setq ob-mermaid-cli-path "/opt/homebrew/bin/mmdc")
 (add-to-list 'org-structure-template-alist '("m" . "src mermaid :file ~/Pictures/mermaid.png"))
 
+
+
+;; Tsx from https://vxlabs.com/2022/06/12/typescript-development-with-emacs-tree-sitter-and-lsp-in-2022/
+(use-package tree-sitter
+  :ensure t
+  :config
+  ;; activate tree-sitter on any buffer containing code for which it has a parser available
+  (global-tree-sitter-mode)
+  ;; you can easily see the difference tree-sitter-hl-mode makes for python, ts or tsx
+  ;; by switching on and off
+  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
+
+(use-package tree-sitter-langs
+  :ensure t
+  :after tree-sitter)
+
+(use-package typescript-mode
+  :after tree-sitter
+  :config
+  ;; we choose this instead of tsx-mode so that eglot can automatically figure out language for server
+  ;; see https://github.com/joaotavora/eglot/issues/624 and https://github.com/joaotavora/eglot#handling-quirky-servers
+  (define-derived-mode typescriptreact-mode typescript-mode
+    "TypeScript TSX")
+  (setq typescript-indent-level 2)
+
+  ;; use our derived mode for tsx files
+  (add-to-list 'auto-mode-alist '("\\.tsx?\\'" . typescriptreact-mode))
+  ;; by default, typescript-mode is mapped to the treesitter typescript parser
+  ;; use our derived mode to map both .tsx AND .ts -> typescriptreact-mode -> treesitter tsx
+  (add-to-list 'tree-sitter-major-mode-language-alist '(typescriptreact-mode . tsx)))
+
+;; https://github.com/orzechowskid/tsi.el/
+;; great tree-sitter-based indentation for typescript/tsx, css, json
+(use-package tsi
+  :after tree-sitter
+  :quelpa (tsi :fetcher github :repo "orzechowskid/tsi.el")
+  ;; define autoload definitions which when actually invoked will cause package to be loaded
+  :commands (tsi-typescript-mode tsi-json-mode tsi-css-mode)
+  :init
+  (add-hook 'typescript-mode-hook (lambda () (tsi-typescript-mode 1)))
+  (add-hook 'json-mode-hook (lambda () (tsi-json-mode 1)))
+  (add-hook 'css-mode-hook (lambda () (tsi-css-mode 1)))
+  (add-hook 'scss-mode-hook (lambda () (tsi-scss-mode 1))))
+
+;; auto-format different source code files extremely intelligently
+;; https://github.com/radian-software/apheleia
+(use-package apheleia
+  :ensure t
+  :config
+  (apheleia-global-mode +1))
