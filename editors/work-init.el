@@ -1,5 +1,4 @@
 (setq visible-bell t)
-
 ;; Interface defaults
 
 ;; I want to work toward using the mouse more, so I am leaving these on to inspire mouse-based configuration.
@@ -178,9 +177,16 @@
 (use-package quelpa-use-package)
 (require 'quelpa-use-package)
 
+(defun psalm-set-avy-keys-colemak ()
+    (interactive)
+  (setq avy-keys '(?a ?r ?s ?t ?o ?i ?e ?n ?d ?h)))
+
+(defun psalm-set-avy-keys-qwerty ()
+    (interactive)
+  (setq avy-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l ?\;)))
+
 (use-package avy
   :config
-  (setq avy-keys '(?a ?r ?s ?t ?o ?i ?e ?n ?d ?h))
   (global-set-key (kbd "C-;") 'avy-goto-char-timer)
   (global-set-key (kbd "C-S-p") 'avy-goto-line-above)
   (global-set-key (kbd "C-S-n") 'avy-goto-line-below)
@@ -256,6 +262,8 @@
 (define-key org-mode-map (kbd "C-c RET") 'psalm/insert-header-eof)
 (define-key org-mode-map (kbd "C-c n") 'org-next-item)
 (define-key org-mode-map (kbd "C-c p") 'org-previous-item)
+(define-key org-agenda-mode-map (kbd "s") 'org-agenda-schedule)
+(define-key org-agenda-mode-map (kbd "d") 'org-agenda-deadline)
 
 (defun psalm/org-end-of-meta-data () ""
        (interactive)
@@ -355,7 +363,7 @@
 			       "* NEXT %?")
 			      ("j" "Journal note" entry
 			       (file+olp+datetree "journal.org")
-			       "* %jump %?" :U-to-captured t)
+			       "* %U %?" :jump-to-captured t)
 			      ("c" "Code Review" entry
 			       (file+headline "staging.org" "Code Reviewing Ideas")
 			       "* IDEA %u %?")
