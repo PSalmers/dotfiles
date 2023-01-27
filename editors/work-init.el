@@ -66,7 +66,7 @@
 
 ;; iSpell for spell check
 ; Skip UUIDs in org mode
-(add-to-list 'ispell-skip-region-alist '("[0-9a-f]\\{8\\}-[0-9a-f]\\{4\\}-[0-9a-f]\\{4\\}-[0-9a-f]\\{4\\}-[0-9a-f]\\{12\\}"))
+(add-to-list 'ispell-skip-region-alist '("[0-9a-f]\\{8\\}-[0-9a-f]\\{4\\}-[0-9a-f]\\{4\\}-[0-9a-f]\\{4\\}-[0-9a-f]\\{12\\}" "@[a-zA-Z]+"))
 ; Skip link locations in org mode (often HTTP URLs)
 (add-to-list 'ispell-skip-region-alist '("\\[\\[" . "\\]\\["))
 
@@ -212,6 +212,7 @@
 
 ;; Org Configuration
 (require 'org)
+(require 'org-agenda)
 
 
 (defun org-id-complete-link (&optional arg)
@@ -318,6 +319,7 @@
       org-archive-location (concat org-directory "/journal.org::datetree/")
       org-archive-save-context-info nil
       org-attach-store-link-p t
+      org-deadline-warning-days 10000
       org-attach-auto-tag nil
       org-attach-id-dir (concat org-directory "/data/")
       org-attach-use-inheritance t
@@ -361,6 +363,9 @@
 			      ("n" "Next Action" entry
 			       (file+olp "staging.org" "Tasks")
 			       "* NEXT %?")
+			      ("w" "Workflow Idea" entry
+			       (file+olp "staging.org" "Tasks" "Organization and Personal Tech")
+			       "* IDEA %?")
 			      ("j" "Journal note" entry
 			       (file+olp+datetree "journal.org")
 			       "* %U %?" :jump-to-captured t)
