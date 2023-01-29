@@ -4,14 +4,19 @@
 
 ;; Interface defaults
 
-;; I want to work toward using the mouse more, so I am leaving these on to inspire mouse-based configuration.
-;; My reason for this is that it may be less cognitive overhead to click buttons, and less cognitive overhead is more resilient to age or illness.
-;;(if window-system (tool-bar-mode 0) nil)
-;;(menu-bar-mode 0)
+;; I want to work toward using the mouse more. My reason for this is that it may be less cognitive overhead to click buttons, and less cognitive overhead is more resilient to age or illness. However I do not yet have an appropriate configuration for the menu bar or toolbar. Therefore I have disabled these to free up space and avoid distraction (I find the default menus and buttons useless).
+(if window-system (tool-bar-mode 0) nil)
+(menu-bar-mode 0)
+
+;; I want to use visual line mode on large screens, but not small, IE my phone that runs linux in a command line terminal.
+(if window-system (add-hook 'org-mode-hook 'visual-line-mode) nil)
 
 (xterm-mouse-mode 1)
 (global-display-line-numbers-mode)
-(cua-mode 1)
+
+;; I gain nothing from cua-mode because I often switch between mac, linux, and windows, so my copy-paste hotkeys are changing frequently anyways. Additionally, I find that cua-mode conflicts with org-mode too much. There are replacement hotkeys but I find them confusing. Overall, it has not at all been a boon to me to use cua-mode, and has sometimes gotten in my way.
+;; (cua-mode 1)
+
 (setq mouse-drag-and-drop-region t)
 
 
@@ -210,8 +215,6 @@
 (global-set-key (kbd "C-c o j") 'org-clock-goto)
 (global-set-key (kbd "C-c o g") 'counsel-org-goto-all)
 
-(add-hook 'org-mode-hook 'visual-line-mode)
-
 (defun my-org-goto () (interactive)
        (org-mark-ring-push)
        (org-refile 1))
@@ -290,7 +293,8 @@
 (define-key orgtbl-mode-map (kbd "C-c w") 'psalm/start-new-workout)
 
 (setq org-agenda-files (list org-directory (concat org-directory "/agenda/")) ; excludes /archive by default
-      org-refile-targets '((nil :maxlevel . 10))
+      org-refile-targets '((nil :maxlevel . 10)
+			   (org-agenda-files :maxlevel . 10))
       org-refile-use-outline-path t
       org-use-tag-inheritance nil
       org-outline-path-complete-in-steps nil
