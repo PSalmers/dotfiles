@@ -1,18 +1,16 @@
 (setq visible-bell t)
 ;; Interface defaults
 
-;; I want to work toward using the mouse more, so I am leaving these on to inspire mouse-based configuration.
-;; My reason for this is that it may be less cognitive overhead to click buttons, and less cognitive overhead is more resilient to age or illness.
+;; I want to work toward using the mouse more. My reason for this is that it may be less cognitive overhead to click buttons, and less cognitive overhead is more resilient to age or illness. However I do not yet have an appropriate configuration for the menu bar or toolbar. Therefore I have disabled these to free up space and avoid distraction (I find the default menus and buttons useless).
 (if window-system (tool-bar-mode 0) nil)
 (menu-bar-mode 0)
 
 (xterm-mouse-mode 1)
+(global-display-line-numbers-mode)
 
-;; This is mostly a problem for org-mode, which does not indent the line correctly when headers are folded
-;;(global-display-line-numbers-mode)
+;; I gain nothing from cua-mode because I often switch between mac, linux, and windows, so my copy-paste hotkeys are changing frequently anyways. Additionally, I find that cua-mode conflicts with org-mode too much. There are replacement hotkeys but I find them confusing. Overall, it has not at all been a boon to me to use cua-mode, and has sometimes gotten in my way.
+;; (cua-mode 1)
 
-;; I have found this annoying and unhelpful
-;;(cua-mode 1)
 (setq mouse-drag-and-drop-region t)
 
 
@@ -66,7 +64,7 @@
 
 ;; iSpell for spell check
 ; Skip UUIDs in org mode
-(add-to-list 'ispell-skip-region-alist '("[0-9a-f]\\{8\\}-[0-9a-f]\\{4\\}-[0-9a-f]\\{4\\}-[0-9a-f]\\{4\\}-[0-9a-f]\\{12\\}" "@[a-zA-Z]+"))
+(add-to-list 'ispell-skip-region-alist '("[0-9a-f]\\{8\\}-[0-9a-f]\\{4\\}-[0-9a-f]\\{4\\}-[0-9a-f]\\{4\\}-[0-9a-f]\\{12\\}"))
 ; Skip link locations in org mode (often HTTP URLs)
 (add-to-list 'ispell-skip-region-alist '("\\[\\[" . "\\]\\["))
 
@@ -228,8 +226,6 @@
 (global-set-key (kbd "C-c o a") 'org-agenda)
 (global-set-key (kbd "C-c o j") 'org-clock-goto)
 (global-set-key (kbd "C-c o g") 'counsel-org-goto-all)
-
-(add-hook 'org-mode-hook 'visual-line-mode)
 
 (defun my-org-goto () (interactive)
        (org-mark-ring-push)

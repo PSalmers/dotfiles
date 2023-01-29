@@ -81,8 +81,8 @@
 ;;(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 
 ; fetch the list of packages available. I have commented this out to avoid needlessly pinging melpa etc on startup
-(unless package-archive-contents
- (package-refresh-contents))
+;(unless package-archive-contents
+; (package-refresh-contents))
 
 (setq package-list
       '(avy
@@ -172,12 +172,20 @@
   :load-path "~/src/github.com/Shopify/spin.el")
 
 
-;; Avy Settings
-(require 'avy)
-(global-set-key (kbd "C-;") 'avy-goto-char-timer)
-(global-set-key (kbd "C-S-p") 'avy-goto-line-above)
-(global-set-key (kbd "C-S-n") 'avy-goto-line-below)
-(global-set-key (kbd "C-S-k") 'avy-kill-region)
+(defun psalm-set-avy-keys-colemak ()
+    (interactive)
+  (setq avy-keys '(?a ?r ?s ?t ?o ?i ?e ?n ?d ?h)))
+
+(defun psalm-set-avy-keys-qwerty ()
+    (interactive)
+  (setq avy-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l ?\;)))
+
+(use-package avy
+  :config
+  (global-set-key (kbd "C-;") 'avy-goto-char-timer)
+  (global-set-key (kbd "C-S-p") 'avy-goto-line-above)
+  (global-set-key (kbd "C-S-n") 'avy-goto-line-below)
+  (global-set-key (kbd "C-S-k") 'avy-kill-region))
 
 ;; Fancy Dabbrev
 ;; Load fancy-dabbrev.el:
@@ -199,6 +207,7 @@
 
 ;; Org Configuration
 (require 'org)
+(require 'org-agenda)
 
 
 (defun org-id-complete-link (&optional arg)
@@ -247,6 +256,8 @@
 (define-key org-mode-map (kbd "C-c RET") 'psalm/insert-header-eof)
 (define-key org-mode-map (kbd "C-c n") 'org-next-item)
 (define-key org-mode-map (kbd "C-c p") 'org-previous-item)
+(define-key org-agenda-mode-map (kbd "s") 'org-agenda-schedule)
+(define-key org-agenda-mode-map (kbd "d") 'org-agenda-deadline)
 
 (defun psalm/org-end-of-meta-data () ""
        (interactive)
@@ -301,6 +312,7 @@
       org-tags-column 0
       org-tag-persistent-alist '(("decisions" . ?d)
 				 ("references" . ?r)
+				 ("solved_problems" . ?s)
 				 ("obsolete" . ?o))
       org-use-speed-commands t
       org-speed-commands (nconc '(("User Commands")
@@ -321,11 +333,12 @@
       org-archive-location (concat org-directory "/journal.org::datetree/")
       org-archive-save-context-info nil
       org-attach-store-link-p t
+      org-deadline-warning-days 10000
       org-attach-auto-tag nil
       org-attach-id-dir (concat org-directory "/data/")
       org-attach-use-inheritance t
       org-image-actual-width (list 500)
-      org-agenda-dim-blocked-tasks nil ;; Disabled because I am using NEXT
+      org-agenda-dim-blocked-tasks t ;; +Disabled because I am using NEXT+ Enabled because I want my todos to be more automatically handled
       org-agenda-todo-ignore-scheduled 'future
       org-agenda-todo-ignore-time-comparison-use-seconds t
       org-agenda-skip-deadline-prewarning-if-scheduled t
@@ -364,9 +377,15 @@
 			      ("n" "Next Action" entry
 			       (file+olp "staging.org" "Tasks")
 			       "* NEXT %?")
+			      ("w" "Workflow Idea" entry
+			       (file+olp "staging.org" "Inbox")
+			       "* IDEA %?")
 			      ("j" "Journal note" entry
 			       (file+olp+datetree "journal.org")
-			       "* Journal" :jump-to-captured t)
+			       "* %U %?" :jump-to-captured t)
+			      ("c" "Code Review" entry
+			       (file+headline "staging.org" "Code Reviewing Ideas")
+			       "* IDEA %u %?")
 			      ("s" "Sleep Journal" plain
 			       (file+olp+datetree "sleep-journal.org")
 			       "- start-finish of attempt :: %?\n- medicine used :: \n- Restedness 1-10 :: ")
