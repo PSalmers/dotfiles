@@ -307,8 +307,8 @@
 				 org-speed-commands)
       org-agenda-custom-commands '(("n" "Next Actions" todo "NEXT")
 				   ("d" "Schedule and NEXT" ((agenda "" ((org-agenda-span 'day)))
-							     (todo "NEXT")
-							     (todo "WAIT"))))
+							     (todo "WAIT")
+							     (todo "NEXT"))))
       org-startup-indented t
       org-link-frame-setup '((file . find-file)) ; opens links to org file in same window
       org-indent-mode-hides-stars t
