@@ -170,6 +170,9 @@
   :if (file-exists-p "~/src/github.com/Shopify/spin.el")
   :load-path "~/src/github.com/Shopify/spin.el")
 
+(require 'org-list)
+(add-hook 'org-todo-repeat-hook #'org-reset-checkbox-state-subtree)
+
 (require 'use-package-ensure)
 (setq use-package-always-ensure t)
 (use-package quelpa-use-package)
@@ -226,6 +229,8 @@
 (global-set-key (kbd "C-c o a") 'org-agenda)
 (global-set-key (kbd "C-c o j") 'org-clock-goto)
 (global-set-key (kbd "C-c o g") 'counsel-org-goto-all)
+
+(add-hook 'org-mode-hook 'visual-line-mode)
 
 (defun my-org-goto () (interactive)
        (org-mark-ring-push)
