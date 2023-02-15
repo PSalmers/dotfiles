@@ -142,6 +142,7 @@
   (global-set-key (kbd "<escape>") #'god-mode-all)
   (global-set-key (kbd "M-o") #'god-mode-all)
   (define-key god-local-mode-map (kbd "i") #'god-local-mode)
+  (define-key god-local-mode-map (kbd "C-.") #'repeat)
   (require 'god-mode-isearch)
   (define-key isearch-mode-map (kbd "<escape>") #'god-mode-isearch-activate)
   (define-key isearch-mode-map (kbd "M-o") #'god-mode-isearch-activate)
@@ -266,6 +267,7 @@
 (define-key org-mode-map (kbd "C-c p") 'org-previous-item)
 (define-key org-agenda-mode-map (kbd "s") 'org-agenda-schedule)
 (define-key org-agenda-mode-map (kbd "d") 'org-agenda-deadline)
+(define-key org-agenda-mode-map (kbd "i") 'org-agenda-clock-in)
 
 (defun psalm/org-end-of-meta-data () ""
        (interactive)
@@ -313,7 +315,12 @@
       org-agenda-custom-commands '(("n" "Next Actions" todo "NEXT")
 				   ("d" "Schedule and NEXT" ((agenda "" ((org-agenda-span 'day)))
 							     (todo "WAIT")
-							     (todo "NEXT"))))
+							     (todo "NEXT")))
+				   ("j" "Journal" agenda "" ((org-agenda-span 'day)
+							      (org-agenda-prefix-format "%-12t %s")
+							      (org-agenda-start-with-log-mode "clockcheck")
+							      (org-agenda-include-inactive-timestamps t))))
+      org-agenda-clockreport-parameter-plist '(:link t :maxlevel 4)
       org-startup-indented t
       org-link-frame-setup '((file . find-file)) ; opens links to org file in same window
       org-indent-mode-hides-stars t
@@ -351,10 +358,10 @@
 						      :background ,"yellow"))
 			       ("IDEA" . (:foreground ,"black"
 						      :background ,"violet")))
-      org-agenda-prefix-format '((agenda . "%?-12t% s")
-				(todo . "")
-				(tags . "")
-				(search . " %i %-12:c"))
+      ;; org-agenda-prefix-format '((agenda . "%i %?-12t% s")
+      ;; 				(todo . "")
+      ;; 				(tags . "")
+      ;; 				(search . " %i %-12:c"))
       org-habit-show-all-today nil
       org-id-link-to-org-use-id t)
 
