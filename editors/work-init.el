@@ -42,7 +42,6 @@
 
 ;; Text editing tweaks
 (global-set-key (kbd "M-z") 'zap-up-to-char)
-(global-set-key (kbd "C-.") 'repeat)
 
 (setq calendar-week-start-day 0) ; The default value of "Sunday" keeps it consistent with more calendars around me.
 
@@ -114,6 +113,7 @@
 (global-set-key (kbd "C-c s") 'swiper)
 (global-set-key (kbd "C-x b") 'counsel-switch-buffer)
 
+
 ;;; Themes
 ;; Modus
 (setq modus-themes-org-blocks 'gray-background) ; gray instead of tinted because tinted does not work for languages I haven't installed the mode for
@@ -166,10 +166,6 @@
 			  :background "#efefef"))))
 
   (add-hook 'post-command-hook 'my-god-mode-update-mode-line))
-
-(use-package spin
-  :if (file-exists-p "~/src/github.com/Shopify/spin.el")
-  :load-path "~/src/github.com/Shopify/spin.el")
 
 (require 'org-list)
 (add-hook 'org-todo-repeat-hook #'org-reset-checkbox-state-subtree)
@@ -342,6 +338,7 @@
       org-log-done 'time
       org-agenda-show-future-repeats nil
       org-use-fast-todo-selection 'expert
+      org-enforce-todo-dependencies t
       org-todo-keywords '((sequence "NEXT(n)" "WAIT(w@)" "|" "DONE(d)" "KILL(k@)")
 			  (type "PROJ(p)" "HOLD(h)" "IDEA(i)" "TODO(t)" "|"))
       org-todo-keyword-faces `(("NEXT" . (:foreground ,"black"
