@@ -169,9 +169,15 @@
 
 (require 'org-list)
 (add-hook 'org-todo-repeat-hook #'org-reset-checkbox-state-subtree)
+(add-hook 'org-checkbox-statistics-hook #'org-mark-ring-push)
 
 (require 'use-package-ensure)
 (setq use-package-always-ensure t)
+
+(use-package undo-tree
+  :config
+  (global-undo-tree-mode))
+
 (use-package quelpa-use-package)
 (require 'quelpa-use-package)
 
@@ -264,6 +270,10 @@
 (define-key org-agenda-mode-map (kbd "s") 'org-agenda-schedule)
 (define-key org-agenda-mode-map (kbd "d") 'org-agenda-deadline)
 (define-key org-agenda-mode-map (kbd "i") 'org-agenda-clock-in)
+(define-key org-agenda-mode-map (kbd "n") 'org-agenda-next-item)
+(define-key org-agenda-mode-map (kbd "p") 'org-agenda-previous-item)
+(define-key org-agenda-mode-map (kbd "N") 'org-agenda-forward-block)
+(define-key org-agenda-mode-map (kbd "P") 'org-agenda-backward-block)
 
 (defun psalm/org-end-of-meta-data () ""
        (interactive)
