@@ -176,6 +176,8 @@
 
 (use-package undo-tree
   :config
+  ;; Prevent undo tree files from polluting your git repo
+  (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
   (global-undo-tree-mode))
 
 (use-package quelpa-use-package)
