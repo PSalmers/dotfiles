@@ -242,6 +242,9 @@
        (org-refile 1))
 (define-key org-mode-map (kbd "C-c C-j") 'counsel-org-goto)
 
+;; For god-mode compatibility
+(define-key org-mode-map (kbd "C-c C-&") 'org-mark-ring-goto)
+
 (setq org-directory "~/org")
 
 ; Startup with org project open
@@ -404,7 +407,7 @@
  '(;; other Babel languages
    (plantuml . t)
    (mermaid . t)))
-			      
+
 ;; Plant UML Setup
 ;; active Org-babel languages
 (require 'plantuml-mode)
