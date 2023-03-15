@@ -6,7 +6,7 @@
 (menu-bar-mode 0)
 
 (xterm-mouse-mode 1)
-(global-display-line-numbers-mode)
+;; (global-display-line-numbers-mode)
 
 ;; I gain nothing from cua-mode because I often switch between mac, linux, and windows, so my copy-paste hotkeys are changing frequently anyways. Additionally, I find that cua-mode conflicts with org-mode too much. There are replacement hotkeys but I find them confusing. Overall, it has not at all been a boon to me to use cua-mode, and has sometimes gotten in my way.
 ;; (cua-mode 1)
