@@ -1,0 +1,10 @@
+[Unit]
+Description=https://bugzilla.redhat.com/show_bug.cgi?id=2162013#
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/bash -c "echo disabled > /sys/bus/i2c/devices/i2c-FTCS1000\:00/power/wakeup"
+
+[Install]
+WantedBy=multi-user.target
+

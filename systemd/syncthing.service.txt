@@ -1,0 +1,9 @@
+[Unit]
+Description=Starts syncthing on login, put in .config/systemd/user/
+
+[Service]
+Type=Simple
+ExecStart=/usr/bin/syncthing
+
+[Install]
+WantedBy=default.target

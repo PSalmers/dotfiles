@@ -12,7 +12,7 @@
 (if window-system (add-hook 'org-mode-hook 'visual-line-mode) nil)
 
 (xterm-mouse-mode 1)
-(global-display-line-numbers-mode)
+;; (global-display-line-numbers-mode)
 
 ;; I gain nothing from cua-mode because I often switch between mac, linux, and windows, so my copy-paste hotkeys are changing frequently anyways. Additionally, I find that cua-mode conflicts with org-mode too much. There are replacement hotkeys but I find them confusing. Overall, it has not at all been a boon to me to use cua-mode, and has sometimes gotten in my way.
 ;; (cua-mode 1)
@@ -48,7 +48,6 @@
 
 ;; Text editing tweaks
 (global-set-key (kbd "M-z") 'zap-up-to-char)
-(global-set-key (kbd "C-.") 'repeat)
 
 (setq calendar-week-start-day 0) ; The default value of "Sunday" keeps it consistent with more calendars around me.
 
@@ -81,8 +80,8 @@
 ;;(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 
 ; fetch the list of packages available. I have commented this out to avoid needlessly pinging melpa etc on startup
-;(unless package-archive-contents
-; (package-refresh-contents))
+(unless package-archive-contents
+ (package-refresh-contents))
 
 (setq package-list
       '(avy
@@ -96,7 +95,6 @@
 	popup
 	smex
 	swiper
-	solarized-theme
 	use-package
 	which-key
 	; visual-fill-column ; This mode does not indent the fill column in org-indent mode
@@ -143,6 +141,7 @@
   (global-set-key (kbd "<escape>") #'god-mode-all)
   (global-set-key (kbd "M-o") #'god-mode-all)
   (define-key god-local-mode-map (kbd "i") #'god-local-mode)
+  (define-key god-local-mode-map (kbd "C-.") #'repeat)
   (require 'god-mode-isearch)
   (define-key isearch-mode-map (kbd "<escape>") #'god-mode-isearch-activate)
   (define-key isearch-mode-map (kbd "M-o") #'god-mode-isearch-activate)
@@ -167,10 +166,21 @@
 
   (add-hook 'post-command-hook 'my-god-mode-update-mode-line))
 
-(use-package spin
-  :if (file-exists-p "~/src/github.com/Shopify/spin.el")
-  :load-path "~/src/github.com/Shopify/spin.el")
+(require 'org-list)
+(add-hook 'org-todo-repeat-hook #'org-reset-checkbox-state-subtree)
+(add-hook 'org-checkbox-statistics-hook #'org-mark-ring-push)
 
+(require 'use-package-ensure)
+(setq use-package-always-ensure t)
+
+(use-package undo-tree
+  :config
+  ;; Prevent undo tree files from polluting your git repo
+  (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
+  (global-undo-tree-mode))
+
+(use-package quelpa-use-package)
+(require 'quelpa-use-package)
 
 (defun psalm-set-avy-keys-colemak ()
     (interactive)
@@ -229,6 +239,9 @@
        (org-refile 1))
 (define-key org-mode-map (kbd "C-c C-j") 'counsel-org-goto)
 
+;; For god-mode compatibility
+(define-key org-mode-map (kbd "C-c C-&") 'org-mark-ring-goto)
+
 (setq org-directory (concat psalm-sync-dir "org"))
 
 ; Startup with org project open
@@ -258,6 +271,11 @@
 (define-key org-mode-map (kbd "C-c p") 'org-previous-item)
 (define-key org-agenda-mode-map (kbd "s") 'org-agenda-schedule)
 (define-key org-agenda-mode-map (kbd "d") 'org-agenda-deadline)
+(define-key org-agenda-mode-map (kbd "i") 'org-agenda-clock-in)
+(define-key org-agenda-mode-map (kbd "n") 'org-agenda-next-item)
+(define-key org-agenda-mode-map (kbd "p") 'org-agenda-previous-item)
+(define-key org-agenda-mode-map (kbd "N") 'org-agenda-forward-block)
+(define-key org-agenda-mode-map (kbd "P") 'org-agenda-backward-block)
 
 (defun psalm/org-end-of-meta-data () ""
        (interactive)
@@ -325,8 +343,13 @@
 				 org-speed-commands)
       org-agenda-custom-commands '(("n" "Next Actions" todo "NEXT")
 				   ("d" "Schedule and NEXT" ((agenda "" ((org-agenda-span 'day)))
-							     (todo "NEXT")
-							     (todo "WAIT"))))
+							     (todo "WAIT")
+							     (todo "NEXT")))
+				   ("j" "Journal" agenda "" ((org-agenda-span 'day)
+							      (org-agenda-prefix-format "%-12t %s")
+							      (org-agenda-start-with-log-mode "clockcheck")
+							      (org-agenda-include-inactive-timestamps t))))
+      org-agenda-clockreport-parameter-plist '(:link t :maxlevel 4)
       org-startup-indented t
       org-link-frame-setup '((file . find-file)) ; opens links to org file in same window
       org-indent-mode-hides-stars t
@@ -348,6 +371,7 @@
       org-log-done 'time
       org-agenda-show-future-repeats nil
       org-use-fast-todo-selection 'expert
+      org-enforce-todo-dependencies t
       org-todo-keywords '((sequence "NEXT(n)" "WAIT(w@)" "|" "DONE(d)" "KILL(k@)")
 			  (type "PROJ(p)" "HOLD(h)" "IDEA(i)" "TODO(t)" "|"))
       org-todo-keyword-faces `(("NEXT" . (:foreground ,"black"
@@ -364,10 +388,10 @@
 						      :background ,"yellow"))
 			       ("IDEA" . (:foreground ,"black"
 						      :background ,"violet")))
-      org-agenda-prefix-format '((agenda . "%?-12t% s")
-				(todo . "")
-				(tags . "")
-				(search . " %i %-12:c"))
+      ;; org-agenda-prefix-format '((agenda . "%i %?-12t% s")
+      ;; 				(todo . "")
+      ;; 				(tags . "")
+      ;; 				(search . " %i %-12:c"))
       org-habit-show-all-today nil
       org-id-link-to-org-use-id t)
 
