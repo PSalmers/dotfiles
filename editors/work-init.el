@@ -168,7 +168,13 @@
   (add-hook 'post-command-hook 'my-god-mode-update-mode-line))
 
 (require 'org-list)
-(add-hook 'org-todo-repeat-hook #'org-reset-checkbox-state-subtree)
+
+(defun psalm/org-repeat-hook ()
+  (interactive)
+  (org-reset-checkbox-state-subtree)
+  (org-previous-visible-heading 1)
+  (org-cycle))
+(add-hook 'org-todo-repeat-hook #'psalm/org-repeat-hook)
 (add-hook 'org-checkbox-statistics-hook #'org-mark-ring-push)
 
 (require 'use-package-ensure)
