@@ -80,8 +80,8 @@
 ;;(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 
 ; fetch the list of packages available. I have commented this out to avoid needlessly pinging melpa etc on startup
-(unless package-archive-contents
- (package-refresh-contents))
+;; (unless package-archive-contents
+;;  (package-refresh-contents))
 
 (setq package-list
       '(avy
@@ -178,9 +178,6 @@
   ;; Prevent undo tree files from polluting your git repo
   (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
   (global-undo-tree-mode))
-
-(use-package quelpa-use-package)
-(require 'quelpa-use-package)
 
 (defun psalm-set-avy-keys-colemak ()
     (interactive)

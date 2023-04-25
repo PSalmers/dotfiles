@@ -89,7 +89,6 @@
 	popup
 	smex
 	swiper
-	solarized-theme
 	use-package
 	which-key
 	quelpa
