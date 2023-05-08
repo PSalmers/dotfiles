@@ -29,8 +29,7 @@
 
 ;; Mac Hotkeys
 ;; When using a mac-ish board
-;;(setq mac-option-modifier 'control
-;;      mac-command-modifier 'meta)
+(setq mac-command-modifier nil)
 
 ;; When usiong a normal ANSI or ISO board
 (setq mac-option-modifier 'meta)
@@ -85,10 +84,12 @@
 	ivy
 	magit
 	ob-mermaid
+	mermaid-mode
 	plantuml-mode
 	popup
 	smex
 	swiper
+	solarized-theme
 	use-package
 	which-key
 	quelpa
@@ -309,6 +310,16 @@
   (psalm/org-archive-without-delete)
   (psalm/org-archive-delete-logbook))
 
+(setq journal-file-path (concat org-directory "/journal.org"))
+
+(defun psalm/org-journal-jump ()
+  (interactive)
+  (find-file journal-file-path)
+  (org-show-all)
+  (end-of-buffer))
+
+(global-set-key (kbd "C-c o $") 'psalm/org-journal-jump)
+
 (setq org-agenda-files (list org-directory (concat org-directory "/archive/") (concat org-directory "/projects/"))
       org-refile-targets '((nil :maxlevel . 10))
       org-refile-use-outline-path t
@@ -340,8 +351,11 @@
       org-startup-indented t
       org-link-frame-setup '((file . find-file)) ; opens links to org file in same window
       org-indent-mode-hides-stars t
-      org-archive-location (concat org-directory "/journal.org::datetree/")
+      org-archive-location (concat journal-file-path "::datetree/")
       org-archive-save-context-info nil
+      org-special-ctrl-a/e t
+      org-special-ctrl-k t
+      org-special-ctrl-o t
       org-attach-store-link-p t
       org-deadline-warning-days 10000
       org-attach-auto-tag nil
@@ -356,10 +370,12 @@
       org-agenda-skip-deadline-if-done t
       org-log-into-drawer t
       org-log-done 'time
+      org-log-reschedule 'note
+      org-log-redeadline 'note
       org-agenda-show-future-repeats nil
       org-use-fast-todo-selection 'expert
       org-enforce-todo-dependencies t
-      org-todo-keywords '((sequence "NEXT(n)" "WAIT(w@)" "|" "DONE(d)" "KILL(k@)")
+      org-todo-keywords '((sequence "NEXT(n@)" "WAIT(w@)" "|" "DONE(d@)" "KILL(k@)")
 			  (type "PROJ(p)" "HOLD(h)" "IDEA(i)" "TODO(t)" "|"))
       org-todo-keyword-faces `(("NEXT" . (:foreground ,"black"
 						      :background ,"light green"))
