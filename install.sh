@@ -12,5 +12,5 @@
 # Tmux
 ln -sf ~/dotfiles/.tmux.conf ~/.tmux.conf
 
-ln -sf ~/dotfiles/.zshrc ~/spin_zshrc
+ln -sf ~/dotfiles/.zshrc ~/.zshrc
 
