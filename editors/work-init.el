@@ -1,9 +1,13 @@
 (setq visible-bell t)
+
 ;; Interface defaults
 
 ;; I want to work toward using the mouse more. My reason for this is that it may be less cognitive overhead to click buttons, and less cognitive overhead is more resilient to age or illness. However I do not yet have an appropriate configuration for the menu bar or toolbar. Therefore I have disabled these to free up space and avoid distraction (I find the default menus and buttons useless).
 (if window-system (tool-bar-mode 0) nil)
 (menu-bar-mode 0)
+
+;; I want to use visual line mode on large screens, but not small, IE my phone that runs linux in a command line terminal.
+(if window-system (add-hook 'org-mode-hook 'visual-line-mode) nil)
 
 (xterm-mouse-mode 1)
 ;; (global-display-line-numbers-mode)
@@ -112,7 +116,6 @@
 (setq ivy-re-builders-alist '((t . ivy--regex-ignore-order)))
 (global-set-key (kbd "C-c s") 'swiper)
 (global-set-key (kbd "C-x b") 'counsel-switch-buffer)
-
 
 ;;; Themes
 ;; Modus
