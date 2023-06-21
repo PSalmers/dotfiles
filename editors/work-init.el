@@ -26,6 +26,10 @@
 (global-set-key (kbd "C-c C-<left>") 'windmove-left)
 (global-set-key (kbd "C-c C-<up>") 'windmove-up)
 (global-set-key (kbd "C-c C-<down>") 'windmove-down)
+(global-set-key (kbd "C-c <right>") 'windmove-right)
+(global-set-key (kbd "C-c <left>") 'windmove-left)
+(global-set-key (kbd "C-c <up>") 'windmove-up)
+(global-set-key (kbd "C-c <down>") 'windmove-down)
 (setq windmove-create-window t)
 
 ;; Dired
@@ -183,12 +187,6 @@
 (require 'use-package-ensure)
 (setq use-package-always-ensure t)
 
-(use-package undo-tree
-  :config
-  ;; Prevent undo tree files from polluting your git repo
-  (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
-  (global-undo-tree-mode))
-
 (use-package quelpa-use-package)
 (require 'quelpa-use-package)
 
@@ -278,6 +276,7 @@
     (end-of-buffer)
     (insert "\n* "))
 
+
 (define-key org-mode-map (kbd "C-c RET") 'psalm/insert-header-eof)
 (define-key org-mode-map (kbd "C-c n") 'org-next-item)
 (define-key org-mode-map (kbd "C-c p") 'org-previous-item)
@@ -292,6 +291,7 @@
 (defun psalm/org-end-of-meta-data () ""
        (interactive)
        (org-end-of-meta-data t))
+
 
 ;; org-archive functions from stack overflow
 (defun psalm/org-archive-delete-logbook ()
@@ -345,7 +345,8 @@
       org-agenda-custom-commands '(("n" "Next Actions" todo "NEXT")
 				   ("d" "Schedule and NEXT" ((agenda "" ((org-agenda-span 'day)))
 							     (todo "WAIT")
-							     (todo "NEXT")))
+							     (todo "NEXT" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))
+									   (org-agenda-overriding-header "Unscheduled NEXT Actions")))))
 				   ("j" "Journal" agenda "" ((org-agenda-span 'day)
 							      (org-agenda-prefix-format "%-12t %s")
 							      (org-agenda-start-with-log-mode "clockcheck")
