@@ -1,13 +1,15 @@
 (setq visible-bell t)
-
 ;; Interface defaults
+
+(setq-default cursor-type 'bar)
+
+;; Hack for Mac OS windows manager https://github.com/doomemacs/doomemacs/issues/2156#issuecomment-568152944
 
 ;; I want to work toward using the mouse more. My reason for this is that it may be less cognitive overhead to click buttons, and less cognitive overhead is more resilient to age or illness. However I do not yet have an appropriate configuration for the menu bar or toolbar. Therefore I have disabled these to free up space and avoid distraction (I find the default menus and buttons useless).
 (if window-system (tool-bar-mode 0) nil)
-(menu-bar-mode 0)
 
-;; I want to use visual line mode on large screens, but not small, IE my phone that runs linux in a command line terminal.
-(if window-system (add-hook 'org-mode-hook 'visual-line-mode) nil)
+;; Disabling menu-bar-mode on OSX causes the window manager to treat it as a utility window, making it misbehave. https://emacs.stackexchange.com/questions/28121/osx-switching-to-virtual-desktop-doesnt-focus-emacs/28296#28296
+;;(menu-bar-mode 0)
 
 (xterm-mouse-mode 1)
 ;; (global-display-line-numbers-mode)
@@ -68,12 +70,6 @@
 
 (setq make-backup-files nil) ; I use git instead
 
-;; iSpell for spell check
-; Skip UUIDs in org mode
-(add-to-list 'ispell-skip-region-alist '("[0-9a-f]\\{8\\}-[0-9a-f]\\{4\\}-[0-9a-f]\\{4\\}-[0-9a-f]\\{4\\}-[0-9a-f]\\{12\\}"))
-; Skip link locations in org mode (often HTTP URLs)
-(add-to-list 'ispell-skip-region-alist '("\\[\\[" . "\\]\\["))
-
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 ;; Comment/uncomment this line to enable MELPA Stable if desired.  See `package-archive-priorities`
@@ -88,7 +84,6 @@
       '(avy
 	counsel
 	fancy-dabbrev
-	god-mode
 	ivy
 	magit
 	ob-mermaid
@@ -121,13 +116,16 @@
 (global-set-key (kbd "C-c s") 'swiper)
 (global-set-key (kbd "C-x b") 'counsel-switch-buffer)
 
+
 ;;; Themes
+(load-theme 'gruvbox-dark-medium t)
+
 ;; Modus
 (setq modus-themes-org-blocks 'gray-background) ; gray instead of tinted because tinted does not work for languages I haven't installed the mode for
 ;; (load-theme 'modus-operandi t)
 
 ;; Selenized
-(load-theme 'solarized-selenized-light t)
+;;(load-theme 'solarized-selenized-light t)
 
 ;; Zenburn
 ;;(load-theme 'zenburn t)
@@ -141,38 +139,45 @@
       )
 (require 'use-package)
 
-(use-package god-mode
-  :config
-  (defun my-god-mode-update-cursor-type ()
-    (setq cursor-type (if (or god-local-mode buffer-read-only) 'box 'bar)))
-  (add-hook 'post-command-hook #'my-god-mode-update-cursor-type)
-  (global-set-key (kbd "<escape>") #'god-mode-all)
-  (global-set-key (kbd "M-o") #'god-mode-all)
-  (define-key god-local-mode-map (kbd "i") #'god-local-mode)
-  (define-key god-local-mode-map (kbd "C-.") #'repeat)
-  (require 'god-mode-isearch)
-  (define-key isearch-mode-map (kbd "<escape>") #'god-mode-isearch-activate)
-  (define-key isearch-mode-map (kbd "M-o") #'god-mode-isearch-activate)
-  (define-key god-mode-isearch-map (kbd "<escape>") #'god-mode-isearch-disable)
-  (define-key god-mode-isearch-map (kbd "M-o") #'god-mode-isearch-disable)
-  (defun my-god-mode-update-mode-line ()
-    (cond
-     (god-local-mode
-      (set-face-attribute 'mode-line nil
-                          :foreground "#604000"
-                          :background "#fff29a")
-      (set-face-attribute 'mode-line-inactive nil
-                          :foreground "#3f3000"
-                          :background "#fff3da"))
-     (t
-      (set-face-attribute 'mode-line nil
-			  :foreground "#0a0a0a"
-			  :background "#d7d7d7")
-      (set-face-attribute 'mode-line-inactive nil
-			  :foreground "#404148"
-			  :background "#efefef"))))
-
-  (add-hook 'post-command-hook 'my-god-mode-update-mode-line))
+;; (use-package god-mode
+;;   :config
+;;   (defun my-god-mode-update-cursor-type ()
+;;     (setq cursor-type (if (or god-local-mode buffer-read-only) 'box 'bar)))
+;;   (add-hook 'post-command-hook #'my-god-mode-update-cursor-type)
+;;   (defun my-god-mode-all ()
+;;     (interactive)
+;;     (if (god-local-mode)
+;; 	nil
+;;       #'god-mode-all))
+;;   (global-set-key (kbd "<escape>") #'my-god-mode-all)
+;;   (global-set-key (kbd "M-o") #'god-mode-all)
+;;   (define-key god-local-mode-map (kbd "i") #'god-local-mode)
+;;   (define-key god-local-mode-map (kbd "C-.") #'repeat)
+;;   (require 'god-mode-isearch)
+;;   (define-key isearch-mode-map (kbd "<escape>") #'god-mode-isearch-activate)
+;;   (define-key isearch-mode-map (kbd "M-o") #'god-mode-isearch-activate)
+;;   (define-key god-mode-isearch-map (kbd "<escape>") #'god-mode-isearch-disable)
+;;   (define-key god-mode-isearch-map (kbd "M-o") #'god-mode-isearch-disable)
+;;   (defun my-god-mode-update-mode-line ()
+;;     (cond
+;;      (god-local-mode
+;;       (set-face-attribute 'mode-line nil
+;;                           :foreground "#604000"
+;;                           :background "#fabd2f")
+;;       (set-face-attribute 'mode-line-inactive nil
+;;                           :foreground "#3f3000"
+;;                           :background "#fff3da"))
+;;      (t
+;;       (set-face-attribute 'mode-line nil
+;; 			  :foreground "#0a0a0a"
+;; 			  :background "#d7d7d7")
+;;       (set-face-attribute 'mode-line-inactive nil
+;; 			  :foreground "#404148"
+;; 			  :background "#efefef"))))
+;; For god-mode compatibility
+;; (define-key org-mode-map (kbd "C-c C-&") 'org-mark-ring-goto)
+;;   ;; (add-hook 'post-command-hook 'my-god-mode-update-mode-line)
+;;   )
 
 (require 'org-list)
 
@@ -186,6 +191,16 @@
 
 (require 'use-package-ensure)
 (setq use-package-always-ensure t)
+
+;; 905-433-8611
+;; vanessa
+;; ask her to check email
+
+;; (use-package undo-tree
+;;   :config
+;;   ;; Prevent undo tree files from polluting your git repo
+;;   (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
+;;   (global-undo-tree-mode))
 
 (use-package quelpa-use-package)
 (require 'quelpa-use-package)
@@ -249,10 +264,17 @@
        (org-refile 1))
 (define-key org-mode-map (kbd "C-c C-j") 'counsel-org-goto)
 
-;; For god-mode compatibility
-(define-key org-mode-map (kbd "C-c C-&") 'org-mark-ring-goto)
-
 (setq org-directory "~/org")
+
+;; iSpell for spell check
+;; Skip UUIDs in org mode
+(add-to-list 'ispell-skip-region-alist '("[0-9a-f]\\{8\\}-[0-9a-f]\\{4\\}-[0-9a-f]\\{4\\}-[0-9a-f]\\{4\\}-[0-9a-f]\\{12\\}"))
+;; Skip link locations in org mode (often HTTP URLs)
+(add-to-list 'ispell-skip-region-alist '("\\[\\[" . "\\]\\["))
+;; Using personal dictionary
+(setq ispell-personal-dictionary (concat org-directory "/.aspell.en.pws"))
+;; Flyspell
+(add-hook 'org-mode-hook #'flyspell-mode)
 
 ; Startup with org project open
 (setq inhibit-splash-screen t)
@@ -261,9 +283,6 @@
   (org-agenda nil "d")
   (delete-other-windows))
 (add-hook 'window-setup-hook 'psalm/startup)
-
-; Using personal dictionary
-(setq ispell-personal-dictionary (concat org-directory "/.aspell.en.pws"))
 
 ;; Resetting checkboxes
 (define-key org-mode-map (kbd "C-c b") 'org-reset-checkbox-state-subtree)
@@ -324,6 +343,8 @@
 (global-set-key (kbd "C-c o $") 'psalm/org-journal-jump)
 
 (setq org-agenda-files (list org-directory (concat org-directory "/archive/") (concat org-directory "/projects/"))
+      org-startup-folded t
+      org-file-apps (nconc org-file-apps '(("\\.png\\'" . system)))
       org-refile-targets '((nil :maxlevel . 10))
       org-refile-use-outline-path t
       org-use-tag-inheritance nil
@@ -340,7 +361,10 @@
 				  ("e" . move-end-of-line)
 				  ("E" . psalm/org-end-of-meta-data)
 				  ("A" . psalm/org-archive-logbook)
-				  ("x" . org-capture))
+				  ("x" . org-capture)
+				  ("z" . org-add-note)
+				  ("J" . org-clock-goto)
+				  ("&" . org-mark-ring-goto))
 				 org-speed-commands)
       org-agenda-custom-commands '(("n" "Next Actions" todo "NEXT")
 				   ("d" "Schedule and NEXT" ((agenda "" ((org-agenda-span 'day)))
@@ -349,8 +373,13 @@
 									   (org-agenda-overriding-header "Unscheduled NEXT Actions")))))
 				   ("j" "Journal" agenda "" ((org-agenda-span 'day)
 							      (org-agenda-prefix-format "%-12t %s")
-							      (org-agenda-start-with-log-mode "clockcheck")
-							      (org-agenda-include-inactive-timestamps t))))
+							      (org-agenda-start-with-log-mode '(closed clocked state))
+							      (org-agenda-archives-mode t)
+							      (org-agenda-include-inactive-timestamps t)))
+				   ("J" "Done Journal" agenda "" ((org-agenda-span 'day)
+								  (org-agenda-prefix-format "%-12t %s")
+								  (org-agenda-archives-mode t)
+								  (org-agenda-start-with-log-mode '(closed)))))
       org-agenda-clockreport-parameter-plist '(:link t :maxlevel 4)
       org-startup-indented t
       org-link-frame-setup '((file . find-file)) ; opens links to org file in same window
@@ -416,15 +445,41 @@
 			       "* %U %?" :jump-to-captured t)
 			      ("c" "Code Review" entry
 			       (file+headline "staging.org" "Code Reviewing Ideas")
-			       "* IDEA %u %?")
-			      ("s" "Sleep Journal" plain
-			       (file+olp+datetree "sleep-journal.org")
-			       "- start-finish of attempt :: %?\n- medicine used :: \n- Restedness 1-10 :: ")
-			      ("f" "Fitness Journal" plain
-			       (file+olp+datetree "fitness-journal.org")
-			       "- Activity :: %?\n- start-finish :: \n- Avg HR :: ")
-			      ("g" "Grocery" checkitem
-			       (file+headline "staging.org" "Shopping List"))))
+			       "* NEXT Review: %?")))
+
+(use-package org-roam
+  :ensure t
+  :custom
+  (org-roam-directory "~/org/roam")
+  :bind (("C-c r t" . org-roam-buffer-toggle)
+	 ("C-c r f" . org-roam-node-find)
+	 ("C-c r g" . org-roam-graph)
+	 ("C-c r i" . org-roam-node-insert)
+	 ("C-c r c" . org-roam-capture))
+  :config
+  (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+  (org-roam-db-autosync-mode))
+
+(use-package websocket
+  :ensure t)
+
+(use-package simple-httpd
+  :ensure t)
+
+(use-package f
+  :ensure t)
+  
+(use-package org-roam-ui
+    :after org-roam websocket simple-httpd f
+;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
+;;         a hookable mode anymore, you're advised to pick something yourself
+;;         if you don't care about startup time, use
+;;  :hook (after-init . org-roam-ui-mode)
+    :config
+    (setq org-roam-ui-sync-theme t
+          org-roam-ui-follow t
+          org-roam-ui-update-on-save t
+          org-roam-ui-open-on-start t))
 
 ;; Org-Babel
 (org-babel-do-load-languages
