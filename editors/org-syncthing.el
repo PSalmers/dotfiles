@@ -1,6 +1,9 @@
 (setq psalm-sync-dir (if (eq system-type 'windows-nt) "C:/Users/patri/Sync/" "~/Sync/"))
-
+(setq echo-keystrokes 0.01)
 (setq visible-bell t)
+
+(add-to-list 'custom-theme-load-path "/home/patrick/.emacs.d/everforest-emacs/")
+(load-theme 'everforest-hard-dark t)
 
 ;; Interface defaults
 
@@ -86,7 +89,6 @@
       '(avy
 	counsel
 	fancy-dabbrev
-	god-mode
 	ivy
 	magit
 	ob-mermaid
@@ -120,7 +122,7 @@
 ;; (load-theme 'modus-operandi t)
 
 ;; Selenized
-(load-theme 'solarized-selenized-light t)
+;; (load-theme 'solarized-selenized-light t)
 
 ;; Zenburn
 ;;(load-theme 'zenburn t)
@@ -134,38 +136,6 @@
       )
 (require 'use-package)
 
-(use-package god-mode
-  :config
-  (defun my-god-mode-update-cursor-type ()
-    (setq cursor-type (if (or god-local-mode buffer-read-only) 'box 'bar)))
-  (add-hook 'post-command-hook #'my-god-mode-update-cursor-type)
-  (global-set-key (kbd "<escape>") #'god-mode-all)
-  (global-set-key (kbd "M-o") #'god-mode-all)
-  (define-key god-local-mode-map (kbd "i") #'god-local-mode)
-  (define-key god-local-mode-map (kbd "C-.") #'repeat)
-  (require 'god-mode-isearch)
-  (define-key isearch-mode-map (kbd "<escape>") #'god-mode-isearch-activate)
-  (define-key isearch-mode-map (kbd "M-o") #'god-mode-isearch-activate)
-  (define-key god-mode-isearch-map (kbd "<escape>") #'god-mode-isearch-disable)
-  (define-key god-mode-isearch-map (kbd "M-o") #'god-mode-isearch-disable)
-  (defun my-god-mode-update-mode-line ()
-    (cond
-     (god-local-mode
-      (set-face-attribute 'mode-line nil
-                          :foreground "#604000"
-                          :background "#fff29a")
-      (set-face-attribute 'mode-line-inactive nil
-                          :foreground "#3f3000"
-                          :background "#fff3da"))
-     (t
-      (set-face-attribute 'mode-line nil
-			  :foreground "#0a0a0a"
-			  :background "#d7d7d7")
-      (set-face-attribute 'mode-line-inactive nil
-			  :foreground "#404148"
-			  :background "#efefef"))))
-
-  (add-hook 'post-command-hook 'my-god-mode-update-mode-line))
 
 (require 'org-list)
 
@@ -242,9 +212,6 @@
        (org-mark-ring-push)
        (org-refile 1))
 (define-key org-mode-map (kbd "C-c C-j") 'counsel-org-goto)
-
-;; For god-mode compatibility
-(define-key org-mode-map (kbd "C-c C-&") 'org-mark-ring-goto)
 
 (setq org-directory (concat psalm-sync-dir "org"))
 
@@ -433,8 +400,6 @@
 			      ("s" "Sleep Journal" plain
 			       (file+olp+datetree "sleep-journal.org")
 			       "- start-finish of attempt :: %?\n- medicine used :: \n- Restedness 1-10 :: ")
-			      ("f" "Fitness Journal" plain
-			       (file+olp+datetree "fitness-journal.org")
 			       "- Activity :: %?\n- start-finish :: \n- Avg HR :: ")
 			      ("g" "Grocery" checkitem
 			       (file+headline "staging.org" "Shopping List"))))
