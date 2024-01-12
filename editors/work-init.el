@@ -1,7 +1,9 @@
-(setq visible-bell t)
 ;; Interface defaults
-
+(setq visible-bell t)
 (setq-default cursor-type 'bar)
+(desktop-save-mode 1)
+
+(add-to-list 'custom-theme-load-path "/Users/psalmers/.emacs.d/everforest-theme/")
 
 ;; Hack for Mac OS windows manager https://github.com/doomemacs/doomemacs/issues/2156#issuecomment-568152944
 
@@ -98,6 +100,7 @@
 	quelpa
 	typescript-mode
 	exec-path-from-shell
+	yaml-mode
 	; visual-fill-column ; This mode does not indent the fill column in org-indent mode
 	))
 
@@ -118,7 +121,7 @@
 
 
 ;;; Themes
-(load-theme 'gruvbox-dark-medium t)
+;; (load-theme 'gruvbox-dark-medium t)
 
 ;; Modus
 (setq modus-themes-org-blocks 'gray-background) ; gray instead of tinted because tinted does not work for languages I haven't installed the mode for
@@ -278,11 +281,12 @@
 
 ; Startup with org project open
 (setq inhibit-splash-screen t)
-(defun psalm/startup ()
-  (interactive)
-  (org-agenda nil "d")
-  (delete-other-windows))
-(add-hook 'window-setup-hook 'psalm/startup)
+;; Commented out because I am using desktop-save-mode
+;; (defun psalm/startup ()
+;;   (interactive)
+;;   (org-agenda nil "d")
+;;   (delete-other-windows))
+;; (add-hook 'window-setup-hook 'psalm/startup)
 
 ;; Resetting checkboxes
 (define-key org-mode-map (kbd "C-c b") 'org-reset-checkbox-state-subtree)
