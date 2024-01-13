@@ -134,6 +134,8 @@
 
 ;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ;; ~> Completion
+(use-package smex)
+
 (use-package counsel
   :config
   (counsel-mode)
@@ -271,10 +273,10 @@
 	org-agenda-skip-deadline-prewarning-if-done t
 	org-agenda-skip-deadline-if-done t
 	org-agenda-show-future-repeats nil
-		;; org-agenda-prefix-format '((agenda . "%i %?-12t% s")
-	;; 				(todo . "")
-	;; 				(tags . "")
-	;; 				(search . " %i %-12:c"))
+	org-agenda-prefix-format '((agenda . "  %t%s")
+				   (todo . "")
+				   (tags . "")
+				   (search . " %i %-12:c"))
 	org-habit-show-all-today nil)
 
   ;; Refile
