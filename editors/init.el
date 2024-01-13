@@ -1,5 +1,5 @@
 ;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-;; Installs packages that cannot be installed via use-package
+;; ~> Installs packages that cannot be installed via use-package
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 ;; Comment/uncomment this line to enable MELPA Stable if desired.  See `package-archive-priorities`
@@ -24,12 +24,12 @@
 
 
 ;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-;; Sets directory from which others are derived
+;; ~> Sets directory from which others are derived
 (setq root-dir (if (eq system-type 'windows-nt) "C:/Users/patri/" "~/"))
 
 
 ;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-;; Visual tweaks to the UI
+;; ~> Visual tweaks to the UI
 (setq echo-keystrokes 0.01)
 (setq visible-bell t)
 
@@ -46,7 +46,7 @@
 
 
 ;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-;; Mouse
+;; ~> Mouse
 
 ;; Enable mouse if in terminal. Useful for SSH situations.
 (xterm-mouse-mode 1)
@@ -55,14 +55,14 @@
 
 
 ;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-;; CUA Mode
+;; ~> CUA Mode
 
 ;; I gain nothing from cua-mode because I often switch between mac, linux, and windows, so my copy-paste hotkeys are changing frequently anyways. Additionally, I find that cua-mode conflicts with org-mode too much. There are replacement hotkeys but I find them confusing. Overall, it has not at all been a boon to me to use cua-mode, and has sometimes gotten in my way.
 ;; (cua-mode 1)
 
 
 ;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-;; Windmove
+;; ~> Windmove
 (global-set-key (kbd "C-c C-<right>") 'windmove-right)
 (global-set-key (kbd "C-c C-<left>") 'windmove-left)
 (global-set-key (kbd "C-c C-<up>") 'windmove-up)
@@ -71,12 +71,12 @@
 
 
 ;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-;; Dired
+;; ~> Dired
 (setq dired-dwim-target t)
 
 
 ;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-;; Mac Hotkeys
+;; ~> Mac Hotkeys
 
 ;; When using a mac-ish board
 (setq mac-command-modifier nil)
@@ -86,7 +86,7 @@
 
 
 ;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-;; Custom global keys
+;; ~> Custom global keys
 
 ;; Open init.el
 (global-set-key (kbd "C-c fi") (lambda () (interactive) (find-file (concat root-dir ".emacs.d/init.el"))))
@@ -100,7 +100,7 @@
 
 
 ;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-;; Tweaks to Emacs' auto file generation
+;; ~> Tweaks to Emacs' auto file generation
 
 (auto-save-visited-mode 1)
 (setq make-backup-files nil) ; I use git instead
@@ -110,7 +110,7 @@
 
 
 ;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-;; Grep
+;; ~> Grep
 
 (setq
    grep-find-command
@@ -118,7 +118,7 @@
 
 
 ;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-;; Spell Checking
+;; ~> Spell Checking
 
 (use-package ispell
   :after (org) ; Spellings are defined in my org project
@@ -133,7 +133,7 @@
 
 
 ;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-;; Completion
+;; ~> Completion
 (use-package counsel
   :config
   (counsel-mode)
@@ -146,19 +146,19 @@
 
 
 ;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-;; Swiper
+;; ~> Swiper
 (use-package swiper
   :config
   (global-set-key (kbd "C-c s") 'swiper))
 
 
 ;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-;; Magit
+;; ~> Magit
 (use-package magit)
 
 
 ;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-;; Avy
+;; ~> Avy
 (use-package avy
   :config
   (global-set-key (kbd "C-t") 'avy-goto-char-timer)
@@ -175,7 +175,7 @@
 
 
 ;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-;; Dabbrev
+;; ~> Dabbrev
 (use-package popup)
 (use-package fancy-dabbrev
   :after (popup)
@@ -195,7 +195,7 @@
 
 
 ;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-;; Org
+;; ~> Org
 (use-package org
   :after (counsel)
   :config
