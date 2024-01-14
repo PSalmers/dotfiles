@@ -123,13 +123,19 @@
 (use-package ispell
   :after (org) ; Spellings are defined in my org project
   :config
-					; Skip UUIDs in org mode
+  ;; Skip UUIDs in org mode
   (add-to-list 'ispell-skip-region-alist '("[0-9a-f]\\{8\\}-[0-9a-f]\\{4\\}-[0-9a-f]\\{4\\}-[0-9a-f]\\{4\\}-[0-9a-f]\\{12\\}"))
-					; Skip link locations in org mode (often HTTP URLs)
+  ;; Skip link locations in org mode (often HTTP URLs)
   (add-to-list 'ispell-skip-region-alist '("\\[\\[" . "\\]\\["))
 
-					; Using personal dictionary
+  ;; Using personal dictionary
   (setq ispell-personal-dictionary (concat org-directory "/.aspell.en.pws")))
+
+(use-package flyspell
+  :after (ispell org)
+  :config
+  (add-hook 'org-mode-hook 'flyspell-mode)
+  (setq ispell-dictionary "en_CA"))
 
 
 ;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -417,5 +423,17 @@
 
   (add-to-list 'org-structure-template-alist '("p" . "src plantuml :file ~/Pictures/plantuml.png")))
 			      
-
+;; Org Roam
+(use-package org-roam
+  :after (magit)
+  :custom
+  (org-roam-directory (file-truename (concat org-directory "/roam")))
+  :bind (("C-c w t" . org-roam-buffer-toggle)
+	 ("C-c w f" . org-roam-node-find)
+	 ("C-c w i" . org-roam-node-insert)
+	 ("C-c w c" . org-roam-capture))
+  :config
+  (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10" 'face 'org-tag)))
+  (org-roam-db-autosync-mode))
+		      
 
