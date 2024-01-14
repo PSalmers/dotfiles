@@ -370,19 +370,11 @@
 				 (file+olp "staging.org" "Tasks")
 				 "* NEXT %?")
 				("w" "Workflow Idea" entry
-				 (file+olp "staging.org" "Inbox")
-				 "* IDEA %?")
+				 (file+olp "staging.org" "Workflow Ideas")
+				 "* NEXT [#C] %?")
 				("j" "Journal note" entry
 				 (file+olp+datetree "journal.org")
-				 "* %U %?" :jump-to-captured t)
-				("c" "Code Review" entry
-				 (file+headline "staging.org" "Code Reviewing Ideas")
-				 "* IDEA %u %?")
-				("s" "Sleep Journal" plain
-				 (file+olp+datetree "sleep-journal.org")
-				 "- start-finish of attempt :: %?\n- medicine used :: \n- Restedness 1-10 :: ")
-				("g" "Grocery" checkitem
-				 (file+headline "staging.org" "Shopping List"))))
+				 "* %U %?" :jump-to-captured t)))
 
   (defun psalm/org-repeat-hook ()
     (interactive)
