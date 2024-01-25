@@ -25,7 +25,7 @@
 
 ;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ;; ~> Sets directory from which others are derived
-(setq root-dir (if (eq system-type 'windows-nt) "C:/Users/patri/" "~/"))
+(setq root-dir (file-truename (if (eq system-type 'windows-nt) "C:/Users/patri/" "~/")))
 
 
 ;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -212,6 +212,7 @@
   (require 'org-id)
   (require 'org-list)
   (require 'org-agenda)
+  (require 'org-mouse)
   
   ;; Basic global keys
   (global-set-key (kbd "C-c o c") 'org-capture)
