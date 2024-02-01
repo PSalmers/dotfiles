@@ -79,7 +79,7 @@
 ;; ~> Mac Hotkeys
 
 ;; When using a mac-ish board
-(setq mac-command-modifier nil)
+(setq mac-command-modifier 'meta)
 
 ;; When usiong a normal ANSI or ISO board
 (setq mac-option-modifier 'meta)
@@ -300,7 +300,10 @@
 	org-tag-persistent-alist '(("decisions" . ?d)
 				   ("references" . ?r)
 				   ("solved_problems" . ?s)
-				   ("obsolete" . ?o)))
+				   ("obsolete" . ?o)
+				   ("atc")
+				   ("workflow")
+				   ("ergonomics")))
 
   ;; Speed commands
   (setq	org-use-speed-commands t
