@@ -32,6 +32,7 @@
 ;; ~> Visual tweaks to the UI
 (setq echo-keystrokes 0.01)
 (setq visible-bell t)
+(visual-line-mode)
 
 ;; Gruvbox is easy for my coloublind self to parse, and well-supported
 ;; I keep coming back to it. Should just stick with it.
@@ -76,13 +77,58 @@
 
 
 ;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-;; ~> Mac Hotkeys
+;; ~> Consistency with modern apps
+
+(cua-mode)
+;; Prevent accidental deletions
+(setq mark-even-if-inactive nil)
 
 ;; When using a mac-ish board
-(setq mac-command-modifier 'meta)
-
-;; When usiong a normal ANSI or ISO board
+(setq mac-command-modifier 'super)
 (setq mac-option-modifier 'meta)
+;; These are redundant with cua-mode, but make it consistent with mac keyboards
+(global-set-key (kbd "s-c") 'kill-ring-save)
+(global-set-key (kbd "s-x") 'kill-region)
+(global-set-key (kbd "s-v") 'yank)
+(global-set-key (kbd "s-z") 'undo)
+
+(global-set-key (kbd "s-f") 'isearch-forward)
+(global-set-key (kbd "s-F") 'isearch-backward)
+
+(global-set-key (kbd "C-f") 'isearch-forward)
+(global-set-key (kbd "C-F") 'isearch-backward)
+(define-key isearch-mode-map (kbd "ESC") 'isearch-exit)
+(define-key isearch-mode-map (kbd "RET") 'isearch-repeat-forward)
+(define-key isearch-mode-map (kbd "<return>") 'isearch-repeat-forward)
+(define-key isearch-mode-map (kbd "S-RET") 'isearch-repeat-backward)
+(define-key isearch-mode-map (kbd "S-<return>") 'isearch-repeat-backward)
+
+(global-set-key (kbd "s-<right>") 'move-end-of-line)
+(global-set-key (kbd "s-<left>") 'move-beginning-of-line)
+(eval-after-load 'org
+  (progn
+    (define-key org-mode-map (kbd "s-<right>") 'org-end-of-line)
+    (define-key org-mode-map (kbd "s-<left>") 'org-beginning-of-line)))
+(global-set-key (kbd "s-<down>") 'end-of-buffer)
+(global-set-key (kbd "s-<up>") 'beginning-of-buffer)
+(eval-after-load 'org
+  (progn
+    ;; Removed so that M-arrow can have system-consistent behaviour. org can use another binding, like speedkeys.
+    (define-key org-mode-map (kbd "M-<right>") nil)
+    (define-key org-mode-map (kbd "M-<left>") nil)
+    (define-key org-mode-map (kbd "M-<up>") nil)
+    (define-key org-mode-map (kbd "M-<down>") nil)
+    (define-key org-mode-map (kbd "M-<S-right>") nil)
+    (define-key org-mode-map (kbd "M-<S-left>") nil)
+    (define-key org-mode-map (kbd "M-<S-up>") nil)
+    (define-key org-mode-map (kbd "M-<S-down>") nil)
+    ;; org-support-shift-select is jankier than just disabling org shift keys.
+    (define-key org-mode-map (kbd "<S-right>") nil)
+    (define-key org-mode-map (kbd "<S-left>") nil)
+    (define-key org-mode-map (kbd "<S-up>") nil)
+    (define-key org-mode-map (kbd "<S-down>") nil)))
+(global-set-key (kbd "M-<down>") 'scroll-up-command)
+(global-set-key (kbd "M-<up>") 'scroll-down-command)
 
 
 ;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -102,6 +148,7 @@
 ;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ;; ~> Tweaks to Emacs' auto file generation
 
+(setq auto-save-visited-interval 1)
 (auto-save-visited-mode 1)
 (setq make-backup-files nil) ; I use git instead
 
@@ -264,7 +311,8 @@
   ;; Agenda
   (setq org-agenda-files (list org-directory (concat org-directory "/agenda/")) ; excludes /archive by default
 	org-agenda-custom-commands '(("n" "Next Actions" todo "NEXT")
-				     ("d" "Schedule and NEXT" ((agenda "" ((org-agenda-span 'day)))
+				     ("d" "Schedule and NEXT" ((tags "dontforget")
+							       (agenda "" ((org-agenda-span 'day)))
 							       (todo "WAIT")
 							       (todo "NEXT")))
 				     ("j" "Journal" agenda "" ((org-agenda-span 'day)
@@ -324,7 +372,8 @@
 
   ;; Visual tweaks
   (setq org-indent-mode-hides-stars t
-	org-image-actual-width (list 500))
+	org-image-actual-width (list 500)
+	org-hide-emphasis-markers t)
 
   ;; Archive
   (setq org-archive-location (concat journal-file-path "::datetree/")
@@ -336,7 +385,7 @@
 	org-special-ctrl-o t)
 
   ;; Attachments
-  (setq org-attach-store-link-p t
+  (setq org-attach-store-link-p 'attached
 	org-attach-auto-tag nil
 	org-attach-id-dir (concat org-directory "/data/")
 	org-attach-use-inheritance t)
@@ -398,6 +447,18 @@
 
   (org-link-set-parameters "id"
 			   :complete 'org-id-complete-link))
+
+(use-package org-autolist
+  :after (org)
+  :config
+  (add-hook 'org-mode-hook (lambda () (org-autolist-mode))))
+
+(use-package org-download
+  :after (org)
+  :config
+  (setq org-download-method 'attach)
+  ;; Drag-and-drop to `dired`
+  (add-hook 'dired-mode-hook 'org-download-enable))
 
 ;; Org Babel
 (use-package ob-mermaid
