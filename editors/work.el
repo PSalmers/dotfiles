@@ -17,7 +17,7 @@
 
 (global-set-key (kbd "s-r") 'query-replace)
 (global-set-key (kbd "s-f") 'isearch-forward)
-(global-set-key (kbd "s-S-f") 'isearch-backward)
+(global-set-key (kbd "s-F") 'isearch-backward)
 
 (global-set-key (kbd "s-<right>") 'move-end-of-line)
 (global-set-key (kbd "s-<left>") 'move-beginning-of-line)
