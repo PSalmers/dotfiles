@@ -235,6 +235,10 @@
   (global-set-key (kbd "C-c o j") 'org-clock-goto)
   (global-set-key (kbd "C-c o g") 'counsel-org-goto-all)
 
+  ;; org-list
+  (setq org-list-demote-modify-bullet '(("+" . "-") ("-" . "+") ("*" . "+") ("1." . "a.") ("1)" . "a)") ("a." . "1.") ("a)" . "1)"))
+	org-list-allow-alphabetical t)
+
   ;; Counsel goto but leave mark behind
   (defun my-org-goto () (interactive)
          (org-mark-ring-push)
