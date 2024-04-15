@@ -284,7 +284,7 @@
         org-agenda-custom-commands '(("n" "Next Actions" todo "NEXT")
                                      ("d" "Schedule and NEXT" ((agenda "" ((org-agenda-span 'day)))
                                                                (todo "WAIT")
-                                                               (todo "NEXT")))
+                                                               (todo "NEXT" ((org-agenda-todo-ignore-scheduled 'all)))))
                                      ("j" "Journal" agenda "" ((org-agenda-span 'day)
                                                                (org-agenda-prefix-format "%-12t %s")
                                                                (org-agenda-start-with-log-mode "clockcheck")
