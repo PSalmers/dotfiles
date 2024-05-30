@@ -66,7 +66,22 @@
   (setq org-capture-templates (nconc org-capture-templates
 				     '(("c" "Code Review" entry
 					(file+headline "staging.org" "Code Reviewing Ideas")
-					"* NEXT Review: %?")))))
+					"* NEXT Review: %?")
+				       ("p" "Projects")
+				       ("pe" "App Enablement")
+				       ("pet" "Tasks" entry
+					(id "83F28492-AFA3-40BC-9FBA-9F499A11B2BF")
+					"* NEXT %?")
+				       ("pem" "Meetings" entry
+					(id "678AE71C-7167-412D-8DBB-406A7D670F2E")
+					"* %U %?" :jump-to-captured t)
+				       ("po" "ODP Pre Authentication")
+				       ("pom" "Meetings" entry
+					(id "88459449-6E92-47CD-87F7-49BDA76A7820")
+					"* %U %?" :jump-to-captured t)
+				       ("pot" "Tasks" entry
+					(id "8325049F-9BA7-4B15-8C80-5CB7E5365AE9")
+					"* NEXT %?")))))
 
 ;; Org Babel
 (use-package ob-mermaid
