@@ -327,6 +327,7 @@
   
   ;; Startup
   (setq org-startup-indented t)
+  (setq org-startup-folded 'content)
   
   ;; Links
   (setq org-link-frame-setup '((file . find-file)) ; Open link in same window

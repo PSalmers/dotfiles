@@ -2,8 +2,7 @@ osascript -l JavaScript << EndOfScript
     var appChoice = [
             undefined,
             "Emacs",
-            "Chrome",
-            "iTerm",
+            "Terminal",
             "Code",
             "Slack",
             "Chrome meet.google",
